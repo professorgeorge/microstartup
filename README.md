@@ -2,6 +2,7 @@
 
 > **A Simple, Stage-Gated Operating System for Everyday Innovators, Makers, and Micro-Scale Entrepreneurs.**
 
+[![Live App](https://img.shields.io/badge/Live%20App-Open%20Compass-success.svg)](https://professorgeorge.github.io/microstartup/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-amber.svg)](LICENSE)
 [![PWA Ready](https://img.shields.io/badge/PWA-Offline%20Capable-forest.svg)](manifest.json)
 [![Zero Telemetry](https://img.shields.io/badge/Privacy-Local%20Device%20Storage-blue.svg)](#privacy--architecture)
