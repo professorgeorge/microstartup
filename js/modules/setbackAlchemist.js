@@ -3,6 +3,7 @@
 
 import { alchemistScenarios } from "../data/alchemistData.js";
 import { store } from "../store.js";
+import { getIcon } from "../services/icons.js";
 
 export function initSetbackAlchemist() {
   const modal = document.getElementById("alchemist-modal");
@@ -12,7 +13,7 @@ export function initSetbackAlchemist() {
 
   scenariosList.innerHTML = alchemistScenarios.map(sc => `
     <button class="scenario-item-btn text-left" data-id="${sc.id}">
-      <span class="scenario-title">💡 ${sc.title}</span>
+      <span class="scenario-title">${getIcon("lightbulb", { size: 13, className: "mr-1" })} ${sc.title}</span>
       <span class="scenario-snippet text-xs text-muted mt-1">${sc.symptom}</span>
     </button>
   `).join("");
@@ -71,7 +72,7 @@ function showScenarioDetail(scenarioId, listEl, detailEl) {
     <div class="action-card mb-3 p-3 rounded bg-white-soft border-warm">
       <div class="flex-between mb-1">
         <strong class="text-terracotta">A friendly script to say or send:</strong>
-        <button id="btn-copy-alchemist-script" class="btn-link text-xs">📋 Copy Script</button>
+        <button id="btn-copy-alchemist-script" class="btn-link text-xs">${getIcon("copy", { size: 12 })} Copy Script</button>
       </div>
       <p id="alchemist-script-text" class="text-sm font-italic mb-0 p-2 bg-oat rounded">
         "${scenario.actionPrompt}"
@@ -86,7 +87,7 @@ function showScenarioDetail(scenarioId, listEl, detailEl) {
     <div class="p-3 bg-sand-light rounded border-warm flex-between flex-wrap gap-2">
       <span class="text-xs text-muted">Encountered an awkward situation not listed here?</span>
       <button id="btn-alchemist-custom-coach" class="btn btn-secondary text-xs">
-        ✨ Ask Custom AI Coach →
+        ${getIcon("sparkle", { size: 12 })} Ask Custom AI Coach →
       </button>
     </div>
   `;
@@ -95,8 +96,8 @@ function showScenarioDetail(scenarioId, listEl, detailEl) {
   copyBtn?.addEventListener("click", () => {
     const text = scenario.actionPrompt;
     navigator.clipboard.writeText(text).then(() => {
-      copyBtn.textContent = "✓ Copied!";
-      setTimeout(() => { copyBtn.textContent = "📋 Copy Script"; }, 2000);
+      copyBtn.innerHTML = `${getIcon("check", { size: 12 })} Copied!`;
+      setTimeout(() => { copyBtn.innerHTML = `${getIcon("copy", { size: 12 })} Copy Script`; }, 2000);
     });
   });
 

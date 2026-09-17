@@ -21,6 +21,7 @@ import { renderDailyMissions } from "./modules/dailyMissions.js";
 import { renderMilestoneModal } from "./modules/milestoneBadges.js";
 import { renderConversationSimulator } from "./modules/conversationSimulator.js";
 import { renderAiSettingsModal } from "./modules/aiSettingsModal.js";
+import { getIcon } from "./services/icons.js";
 
 const STEP_TABS = [
   { id: 1, name: "1. Clarify Problem", title: "Step 1: Clarify the Problem" },
@@ -31,9 +32,9 @@ const STEP_TABS = [
 ];
 
 const RESOURCE_TABS = [
-  { id: "stories", name: "🌟 Real Stories", title: "Everyday Innovator Stories: The Micro-Startup Hall of Fame" },
-  { id: "help", name: "💡 Help Guide", title: "The Encourager & Fix-It Guide" },
-  { id: "summary", name: "📄 Summary & Flyer", title: "Project Summary & Community Flyer" }
+  { id: "stories", name: "Real Stories", icon: "star", title: "Everyday Innovator Stories: The Micro-Startup Hall of Fame" },
+  { id: "help", name: "Help Guide", icon: "lightbulb", title: "The Encourager & Fix-It Guide" },
+  { id: "summary", name: "Summary & Flyer", icon: "document", title: "Project Summary & Community Flyer" }
 ];
 
 class App {
@@ -75,17 +76,16 @@ class App {
     const isConfigured = store.isAiConfigured();
     const cfg = store.getAiConfig();
     if (this.aiStatusIndicator && this.aiBtnLabel) {
+      this.aiStatusIndicator.innerHTML = getIcon("sparkle", { size: 14 });
       if (isConfigured) {
         const providerName = cfg.provider === "gemini" ? "Gemini" 
           : cfg.provider === "openai" ? "OpenAI" 
           : cfg.provider === "claude" ? "Claude" 
           : cfg.provider === "grok" ? "Grok" 
           : cfg.provider === "ollama" ? "Ollama" : "AI";
-        this.aiStatusIndicator.textContent = "✨";
         this.aiBtnLabel.textContent = `AI: ${providerName}`;
         this.aiBtn?.classList.add("btn-ai-active");
       } else {
-        this.aiStatusIndicator.textContent = "✨";
         this.aiBtnLabel.textContent = "AI Co-Pilot";
         this.aiBtn?.classList.remove("btn-ai-active");
       }
@@ -253,9 +253,9 @@ class App {
       if (isActive) {
         badge = '<span class="nav-dot active-dot"></span>';
       } else if (isUnlocked) {
-        badge = '<span class="nav-dot unlocked-dot">✓</span>';
+        badge = `<span class="nav-dot unlocked-dot">${getIcon("check", { size: 12, strokeWidth: 2.5 })}</span>`;
       } else {
-        badge = '<span class="nav-lock">🔒</span>';
+        badge = `<span class="nav-lock">${getIcon("lock", { size: 12 })}</span>`;
       }
 
       html += `
@@ -283,6 +283,7 @@ class App {
           data-tab="${tab.id}" 
           title="${tab.title}"
         >
+          ${getIcon(tab.icon, { size: 14 })}
           <span class="stage-nav-label">${tab.name}</span>
         </button>
       `;

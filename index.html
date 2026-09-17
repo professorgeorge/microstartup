@@ -12,6 +12,11 @@
   <link rel="icon" type="image/svg+xml" href="./icons/icon.svg">
   <link rel="manifest" href="./manifest.json">
   
+  <!-- Editorial Typography: Plus Jakarta Sans & Newsreader -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="./css/main.css">
   <link rel="stylesheet" href="./css/stages.css">
   <link rel="stylesheet" href="./css/modules.css">
@@ -23,7 +28,9 @@
   <header class="app-header">
     <div class="header-inner">
       <div class="brand-section">
-        <div class="brand-logo" title="Micro-Startup Compass">🧭</div>
+        <div class="brand-logo" title="Micro-Startup Compass">
+          <img src="./icons/icon.svg" alt="Compass Emblem" width="32" height="32" class="brand-logo-img">
+        </div>
         <div>
           <h1 class="brand-title">Micro-Startup Compass</h1>
           <div class="brand-tagline">A Simple Step-by-Step Guide for Everyday Innovators</div>
@@ -39,19 +46,26 @@
       <div class="confidence-meter-box" id="confidence-meter-badge" title="Click to view your Founder Milestone & Momentum Badges" style="cursor: pointer;">
         <span class="confidence-lbl">Progress:</span>
         <span class="confidence-val" id="confidence-score-val">0%</span>
-        <span class="badge-icon-indicator" style="margin-left: 4px;" title="View Breakthrough Badges">🏅</span>
+        <span class="badge-icon-indicator" style="margin-left: 4px; display: inline-flex; align-items: center;" title="View Breakthrough Badges">
+          <svg class="svg-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
+        </span>
       </div>
 
       <!-- App Controls: Missions, AI Co-Pilot & Reset -->
       <div class="header-actions flex-row items-center gap-2">
-        <button id="btn-header-missions" class="btn btn-secondary text-xs" title="Open 15-Minute Daily Founder Missions">
-          <span>⚡</span> <span>Missions:</span> <strong id="header-missions-count">0/10</strong>
+        <button id="btn-header-missions" class="btn btn-secondary text-xs flex-row items-center gap-1" title="Open 15-Minute Daily Founder Missions">
+          <svg class="svg-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          <span>Missions:</span> <strong id="header-missions-count">0/10</strong>
         </button>
-        <button id="btn-ai-settings" class="btn btn-secondary text-xs" title="Configure optional AI (OpenAI, Gemini, Claude, Grok, Ollama)">
-          <span id="ai-status-indicator">✨</span> <span id="ai-btn-label">AI Co-Pilot</span>
+        <button id="btn-ai-settings" class="btn btn-secondary text-xs flex-row items-center gap-1" title="Configure optional AI (OpenAI, Gemini, Claude, Grok, Ollama)">
+          <span id="ai-status-indicator" class="flex-center" style="display: inline-flex;">
+            <svg class="svg-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg>
+          </span>
+          <span id="ai-btn-label">AI Co-Pilot</span>
         </button>
-        <button id="btn-reset-data" class="btn btn-secondary text-xs text-danger" title="Permanently erase all stored data and start fresh">
-          🗑️ Reset App
+        <button id="btn-reset-data" class="btn btn-secondary text-xs text-danger flex-row items-center gap-1" title="Permanently erase all stored data and start fresh">
+          <svg class="svg-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+          <span>Reset App</span>
         </button>
       </div>
     </div>
@@ -147,6 +161,6 @@
     </div>
   </footer>
 
-  <script type="module" src="./js/app.js?v=17"></script>
+  <script type="module" src="./js/app.js?v=18"></script>
 </body>
 </html>

@@ -1,8 +1,6 @@
-// dailyMissions.js: The 15-Minute Daily Founder Missions module.
-// Breaks down the startup journey into non-intimidating, bite-sized daily actions.
-
 import { store, DEFAULT_MISSIONS } from "../store.js";
 import { simplifyMission } from "../services/aiClient.js";
+import { getIcon } from "../services/icons.js";
 
 let isMissionsExpanded = false;
 let activeBabyStep = null; // { missionId, data, loading }
@@ -20,7 +18,7 @@ export function renderDailyMissions(container) {
     <div class="modal-header">
       <div class="flex-between w-100">
         <div class="flex-row items-center gap-2">
-          <span style="font-size: 1.4rem;" aria-hidden="true">⚡</span>
+          ${getIcon("bolt", { size: 20, className: "text-terracotta mr-1" })}
           <div>
             <h3 class="m-0 text-sm font-bold text-espresso">15-Minute Daily Founder Missions</h3>
             <span class="text-xs text-muted">Bite-sized daily steps so you never feel overwhelmed</span>
@@ -28,9 +26,9 @@ export function renderDailyMissions(container) {
         </div>
         <div class="flex-row items-center gap-2">
           <span class="badge ${stats.pct === 100 ? "badge-success" : "badge-accent"} text-xs">
-            ${stats.pct === 100 ? "🎉 All 10 Done!" : `🔥 ${stats.completed} of ${stats.total} Done (${stats.pct}%)`}
+            ${stats.pct === 100 ? "All 10 Done!" : `${stats.completed} of ${stats.total} Done (${stats.pct}%)`}
           </span>
-          <button class="btn-icon" id="missions-modal-close-btn" aria-label="Close missions modal">✕</button>
+          <button class="btn-icon" id="missions-modal-close-btn" aria-label="Close missions modal">${getIcon("close", { size: 16 })}</button>
         </div>
       </div>
     </div>
@@ -53,11 +51,11 @@ export function renderDailyMissions(container) {
           ${activeBabyStep && activeBabyStep.missionId === nextMission.id ? `
             <div class="baby-step-card p-3 my-2 bg-sand-light rounded border-warm">
               <div class="flex-between mb-1">
-                <strong class="text-terracotta text-xs">🌱 5-Minute Baby Step: ${activeBabyStep.data?.babyStepTitle || ""}</strong>
+                <strong class="text-terracotta text-xs">${getIcon("sprout", { size: 13, className: "mr-1" })} 5-Minute Baby Step: ${activeBabyStep.data?.babyStepTitle || ""}</strong>
                 <span class="badge badge-accent text-xs">Zero Pressure</span>
               </div>
               <p class="text-xs text-charcoal mb-1">${activeBabyStep.data?.babyStepAction || ""}</p>
-              <div class="text-xs text-muted"><em>💡 Why it works: ${activeBabyStep.data?.whyItWorks || ""}</em></div>
+              <div class="text-xs text-muted"><em>${getIcon("lightbulb", { size: 12, className: "mr-1" })} Why it works: ${activeBabyStep.data?.whyItWorks || ""}</em></div>
             </div>
           ` : ""}
 
@@ -65,18 +63,18 @@ export function renderDailyMissions(container) {
             <span class="badge badge-sand text-xs">Step ${nextMission.stage}</span>
             <div class="flex-row items-center flex-wrap gap-2">
               <button class="btn btn-secondary text-xs btn-simplify-mission" data-id="${nextMission.id}" title="Too tired or anxious today? Reduce this to an effortless 4-minute baby step">
-                ✨ ${activeBabyStep && activeBabyStep.missionId === nextMission.id && activeBabyStep.loading ? "Simplifying..." : "5-Min Baby Step"}
+                ${getIcon("sparkle", { size: 13 })} ${activeBabyStep && activeBabyStep.missionId === nextMission.id && activeBabyStep.loading ? "Simplifying..." : "5-Min Baby Step"}
               </button>
               ${nextMission.stage === 2 ? `
                 <button class="btn btn-secondary text-xs btn-open-sim-mission" title="Practice conversation in simulator">
-                  🎮 Simulator
+                  ${getIcon("gamepad", { size: 13 })} Simulator
                 </button>
               ` : ""}
               <button class="btn btn-primary text-xs btn-jump-mission" data-stage="${nextMission.stage}">
                 Go to Step ${nextMission.stage} →
               </button>
               <button class="btn btn-secondary text-xs btn-quick-check-mission" data-id="${nextMission.id}">
-                ✓ Mark Done
+                ${getIcon("check", { size: 13 })} Mark Done
               </button>
             </div>
           </div>
@@ -84,7 +82,7 @@ export function renderDailyMissions(container) {
       ` : `
         <div class="card p-3 bg-success-soft border-warm mb-3 flex-between">
           <span class="text-xs text-success font-bold">
-            🌟 Fantastic job! You have completed all 10 Daily Founder Missions!
+            ${getIcon("star", { size: 14, className: "mr-1" })} Fantastic job! You have completed all 10 Daily Founder Missions!
           </span>
           <button class="btn btn-secondary text-xs btn-jump-mission" data-stage="summary">
             View Summary & Flyer →
@@ -125,7 +123,7 @@ export function renderDailyMissions(container) {
               <div class="mission-item-actions flex-row items-center gap-2">
                 ${m.stage === 2 ? `
                   <button class="btn btn-secondary text-xs btn-open-sim-mission" title="Rehearse dialogue first">
-                    🎮 Practice
+                    ${getIcon("gamepad", { size: 13 })} Practice
                   </button>
                 ` : ""}
                 <button class="btn btn-secondary text-xs btn-jump-mission" data-stage="${m.stage}">

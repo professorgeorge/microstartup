@@ -3,6 +3,7 @@
 
 import { store } from "../store.js";
 import { callAi, suggestPricingTiers } from "../services/aiClient.js";
+import { getIcon } from "../services/icons.js";
 
 let activePricingTiers = null;
 let isSuggestingTiers = false;
@@ -23,7 +24,7 @@ export function renderStage3(container) {
   const s1 = store.state.stage1;
   const s2 = store.state.stage2;
 
-  const hasInterviews = (s2.interviews && s2.interviews.length >= 5);
+  const hasInterviews = (s2.interviews || []).length > 0;
   const calc = store.getNapkinMathCalculations();
 
   container.innerHTML = `
@@ -43,13 +44,13 @@ export function renderStage3(container) {
       </div>
       <div class="btn-row flex-row items-center gap-2">
         <button id="btn-ai-assist-canvas" class="btn btn-secondary text-xs flex-center gap-1" style="border-color: var(--color-amber);">
-          <span>✨</span> <strong>AI Co-Pilot (Channels & Edge)</strong>
+          ${getIcon("sparkle", { size: 13 })} <strong>AI Co-Pilot (Channels & Edge)</strong>
         </button>
         <button id="btn-sync-canvas" class="btn btn-secondary text-xs">
-          ⚡ Auto-Fill from Steps 1 & 2
+          ${getIcon("bolt", { size: 13 })} Auto-Fill from Steps 1 & 2
         </button>
         <button id="btn-preview-canvas" class="btn btn-secondary text-xs">
-          📄 View Formatted Preview & Print
+          ${getIcon("document", { size: 13 })} View Formatted Preview & Print
         </button>
       </div>
     </div>
@@ -166,14 +167,14 @@ export function renderStage3(container) {
         <div class="flex-row items-center gap-2">
           ${activePricingTiers ? `
             <button id="btn-clear-pricing-tiers" class="btn btn-secondary text-xs" title="Hide suggested packages">
-              ✕ Close Packages
+              ${getIcon("close", { size: 12 })} Close Packages
             </button>
           ` : ""}
           <button id="btn-ai-pricing-tiers" class="btn btn-secondary text-xs" title="Suggest 3 structured packaging tiers (Starter, Core, VIP) with instant math calculations">
-            ${isSuggestingTiers ? "⏳ Analyzing Packages..." : "✨ Suggest 3 Pricing Packages"}
+            ${isSuggestingTiers ? "Analyzing Packages..." : `${getIcon("sparkle", { size: 13 })} Suggest 3 Pricing Packages`}
           </button>
           <button id="btn-apply-napkin-to-canvas" class="btn btn-secondary text-xs" title="Copy these numbers into the Revenue box above">
-            ⚡ Apply to Revenue Box
+            ${getIcon("bolt", { size: 13 })} Apply to Revenue Box
           </button>
         </div>
       </div>
@@ -232,7 +233,7 @@ export function renderStage3(container) {
       ${activePricingTiers ? `
         <div class="pricing-tiers-panel mt-3 p-3 bg-white-soft rounded border-warm">
           <div class="flex-between mb-2">
-            <h4 class="text-espresso text-xs font-bold m-0">💡 Suggested 3-Tier Packaging & Pricing:</h4>
+            <h4 class="text-espresso text-xs font-bold m-0">${getIcon("lightbulb", { size: 13, className: "mr-1" })} Suggested 3-Tier Packaging & Pricing:</h4>
             <span class="text-xs text-muted">Click any price below to load into the calculator</span>
           </div>
           <div class="grid-3-col gap-2">
@@ -261,7 +262,7 @@ export function renderStage3(container) {
           <div class="mt-3 flex-between flex-wrap gap-2">
             <span class="text-xs text-muted">Offer all three? You can copy this complete packaging bundle into your Revenue Streams box.</span>
             <button id="btn-apply-all-tiers-to-revenue" class="btn btn-secondary text-xs">
-              📋 Copy All 3 Packages to Revenue Box
+              ${getIcon("copy", { size: 13 })} Copy All 3 Packages to Revenue Box
             </button>
           </div>
         </div>
@@ -366,7 +367,7 @@ Respond strictly with valid JSON only in this exact format:
     } catch (err) {
       alert(`AI Co-Pilot error: ${err.message || String(err)}`);
     } finally {
-      aiAssistBtn.innerHTML = "<span>✨</span> <strong>AI Co-Pilot (Channels & Edge)</strong>";
+      aiAssistBtn.innerHTML = `${getIcon("sparkle", { size: 13 })} <strong>AI Co-Pilot (Channels & Edge)</strong>`;
       aiAssistBtn.disabled = false;
     }
   });

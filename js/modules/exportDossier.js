@@ -1,8 +1,6 @@
-// exportDossier.js: Generates a clean Project Summary and Printable Community Notice Flyer.
-// Built for everyday innovators to share with advisors, grants, or post on neighborhood bulletin boards.
-
 import { store } from "../store.js";
 import { polishFlyerHooks } from "../services/aiClient.js";
+import { getIcon } from "../services/icons.js";
 
 let activeDossierView = "summary"; // 'summary' or 'flyer'
 let customFlyerHooks = null;
@@ -32,8 +30,8 @@ export function initExportDossier() {
   copyMdBtn?.addEventListener("click", () => {
     const text = activeDossierView === "summary" ? generateMarkdownDossier() : generateFlyerText();
     navigator.clipboard.writeText(text).then(() => {
-      copyMdBtn.textContent = "✓ Copied to Clipboard!";
-      setTimeout(() => { copyMdBtn.textContent = "📋 Copy Text"; }, 2000);
+      copyMdBtn.innerHTML = `${getIcon("check", { size: 12 })} Copied to Clipboard!`;
+      setTimeout(() => { copyMdBtn.innerHTML = `${getIcon("copy", { size: 12 })} Copy Text`; }, 2000);
     });
   });
 
@@ -49,10 +47,10 @@ export function renderDossierView(container) {
     <!-- View Switcher Tabs -->
     <div class="tabs-header mb-3">
       <button class="tab-btn ${activeDossierView === "summary" ? "active" : ""}" id="tab-view-summary">
-        📄 Complete Project Summary
+        ${getIcon("document", { size: 13 })} Complete Project Summary
       </button>
       <button class="tab-btn ${activeDossierView === "flyer" ? "active" : ""}" id="tab-view-flyer">
-        📢 Neighborhood Notice & Flyer
+        ${getIcon("chat", { size: 13 })} Neighborhood Notice & Flyer
       </button>
     </div>
 
@@ -66,11 +64,11 @@ export function renderDossierView(container) {
           <div class="flex-row items-center gap-2">
             ${customFlyerHooks ? `
               <button id="btn-reset-flyer-hooks" class="btn btn-secondary text-xs" title="Restore default flyer copy">
-                ↺ Reset Copy
+                ${getIcon("refresh", { size: 12 })} Reset Copy
               </button>
             ` : ""}
             <button id="btn-ai-polish-flyer" class="btn btn-secondary text-xs" title="Rewrite into warm, neighborly copy with high curiosity headlines for bulletin boards">
-              ${isPolishingFlyer ? "⏳ Polishing Flyer Copy..." : "✨ Polish Flyer for Noticeboards"}
+              ${isPolishingFlyer ? "Polishing Flyer Copy..." : `${getIcon("sparkle", { size: 13 })} Polish Flyer for Noticeboards`}
             </button>
           </div>
         </div>

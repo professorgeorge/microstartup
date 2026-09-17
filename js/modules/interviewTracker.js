@@ -3,6 +3,7 @@
 
 import { store } from "../store.js";
 import { callAi, generateCustomOutreach } from "../services/aiClient.js";
+import { getIcon } from "../services/icons.js";
 
 const QUICK_TAGS = [
   "Losing Money", "Severe Stress", "Tried Other Tools", 
@@ -159,7 +160,7 @@ export function renderStage2(container) {
           <div class="flex-between mb-2">
             <h4 class="m-0 text-espresso text-sm font-bold">5 Friendly Questions Ready to Ask</h4>
             <button id="btn-copy-cheat-sheet" class="btn btn-primary text-xs" data-text="${escapeHtml(cheatSheetText)}">
-              📋 Copy to Phone
+              ${getIcon("copy", { size: 12 })} Copy to Phone
             </button>
           </div>
           <ol class="step-list text-xs mb-0">
@@ -192,7 +193,9 @@ export function renderStage2(container) {
     <!-- Safe Practice Arena: The Customer Discovery Simulator -->
     <div class="card card-highlight mb-4 flex-between" id="simulator-launch-card">
       <div class="flex-row items-center gap-3">
-        <span class="persona-avatar-lg" style="font-size: 2rem;">🎮</span>
+        <span class="persona-avatar-lg text-terracotta" style="display: flex; align-items: center;">
+          ${getIcon("gamepad", { size: 28 })}
+        </span>
         <div>
           <div class="flex-row items-center gap-2">
             <span class="badge badge-accent text-xs">Safe Practice Arena</span>
@@ -204,7 +207,7 @@ export function renderStage2(container) {
         </div>
       </div>
       <button id="btn-launch-sim-step2" class="btn btn-primary text-xs" style="white-space: nowrap;">
-        🎮 Launch Practice Simulator →
+        ${getIcon("gamepad", { size: 13 })} Launch Practice Simulator →
       </button>
     </div>
 
@@ -221,11 +224,11 @@ export function renderStage2(container) {
         <div class="flex-row items-center gap-2">
           ${tailoredAiScripts ? `
             <button id="btn-reset-outreach-scripts" class="btn btn-secondary text-xs" title="Restore default field-tested templates">
-              ↺ Reset to Defaults
+              ${getIcon("refresh", { size: 12 })} Reset to Defaults
             </button>
           ` : ""}
           <button id="btn-ai-tailor-outreach" class="btn btn-secondary text-xs" title="Generate custom Mom Test outreach scripts tailored to your specific audience">
-            ${isTailoringScripts ? "⏳ Tailoring Scripts..." : "✨ Tailor Scripts with AI"}
+            ${isTailoringScripts ? "Tailoring Scripts..." : `${getIcon("sparkle", { size: 13 })} Tailor Scripts with AI`}
           </button>
         </div>
       </div>
@@ -249,7 +252,7 @@ export function renderStage2(container) {
             <div class="flex-between mb-2">
               <span class="badge badge-neutral text-xs">${currentScript.badge}</span>
               <button id="btn-copy-outreach-script" class="btn btn-primary text-xs" data-text="${escapeHtml(currentScript.text)}">
-                📋 Copy Script
+                ${getIcon("copy", { size: 12 })} Copy Script
               </button>
             </div>
             <p id="script-body-text" class="text-sm font-italic mb-2 p-3 bg-oat rounded text-espresso border-warm">
@@ -324,7 +327,7 @@ export function renderStage2(container) {
 
       <div class="flex-between mt-3">
         <button id="btn-ai-analyze-interview" type="button" class="btn btn-secondary text-xs flex-center gap-1" style="border-color: var(--color-amber);">
-          <span>✨</span> <strong>AI Analyze Quote & Signals</strong>
+          ${getIcon("sparkle", { size: 13 })} <strong>AI Analyze Quote & Signals</strong>
         </button>
         <button id="btn-save-interview" class="btn btn-primary">Save Conversation</button>
       </div>
@@ -414,16 +417,16 @@ function attachStage2Events(container, cheatSheetText) {
 
   copyCheatSheetBtn?.addEventListener("click", () => {
     navigator.clipboard.writeText(cheatSheetText).then(() => {
-      copyCheatSheetBtn.textContent = "✓ Copied!";
-      setTimeout(() => { copyCheatSheetBtn.textContent = "📋 Copy to Phone"; }, 2000);
+      copyCheatSheetBtn.innerHTML = `${getIcon("check", { size: 12 })} Copied!`;
+      setTimeout(() => { copyCheatSheetBtn.innerHTML = `${getIcon("copy", { size: 12 })} Copy to Phone`; }, 2000);
     });
   });
 
   copyOutreachBtn?.addEventListener("click", () => {
     const textToCopy = copyOutreachBtn.getAttribute("data-text");
     navigator.clipboard.writeText(textToCopy).then(() => {
-      copyOutreachBtn.textContent = "✓ Copied Script!";
-      setTimeout(() => { copyOutreachBtn.textContent = "📋 Copy Script"; }, 2000);
+      copyOutreachBtn.innerHTML = `${getIcon("check", { size: 12 })} Copied Script!`;
+      setTimeout(() => { copyOutreachBtn.innerHTML = `${getIcon("copy", { size: 12 })} Copy Script`; }, 2000);
     });
   });
 
@@ -561,7 +564,7 @@ Respond strictly with valid JSON only in this exact format:
     } catch (err) {
       alert(`AI Analysis error: ${err.message || String(err)}`);
     } finally {
-      aiAnalyzeBtn.innerHTML = "<span>✨</span> <strong>AI Analyze Quote & Signals</strong>";
+      aiAnalyzeBtn.innerHTML = `${getIcon("sparkle", { size: 13 })} <strong>AI Analyze Quote & Signals</strong>`;
       aiAnalyzeBtn.disabled = false;
     }
   });

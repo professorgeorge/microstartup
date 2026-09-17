@@ -6,6 +6,7 @@ import { INNOVATOR_STORIES } from "../data/innovatorStories.js";
 import { store } from "../store.js";
 import { renderDossierView } from "./exportDossier.js";
 import { coachCustomSetback } from "../services/aiClient.js";
+import { getIcon } from "../services/icons.js";
 
 let activeStoryCategory = "all";
 let activeHelpSubTab = "guide"; // "guide" | "encourager" | "faq"
@@ -39,13 +40,13 @@ export function renderHelpTab(container) {
     <!-- Help Guide Sub-Navigation Tabs -->
     <div class="help-subtab-bar mb-4">
       <button class="btn help-subtab-btn ${activeHelpSubTab === 'guide' ? 'btn-primary' : 'btn-secondary'} text-xs" data-subtab="guide">
-        📖 How to Use This App (No Overwhelm)
+        ${getIcon("document", { size: 13 })} How to Use This App (No Overwhelm)
       </button>
       <button class="btn help-subtab-btn ${activeHelpSubTab === 'encourager' ? 'btn-primary' : 'btn-secondary'} text-xs" data-subtab="encourager">
-        💡 The Encourager & Setback Fixer
+        ${getIcon("lightbulb", { size: 13 })} The Encourager & Setback Fixer
       </button>
       <button class="btn help-subtab-btn ${activeHelpSubTab === 'faq' ? 'btn-primary' : 'btn-secondary'} text-xs" data-subtab="faq">
-        ❓ Frequently Asked Questions (FAQ)
+        ${getIcon("chat", { size: 13 })} Frequently Asked Questions (FAQ)
       </button>
     </div>
 
@@ -103,8 +104,8 @@ export function renderHelpTab(container) {
     const copyBtn = container.querySelector("#btn-copy-tab-script");
     copyBtn?.addEventListener("click", () => {
       navigator.clipboard.writeText(currentScenario.actionPrompt).then(() => {
-        copyBtn.textContent = "✓ Copied Script!";
-        setTimeout(() => { copyBtn.textContent = "📋 Copy Script"; }, 2000);
+        copyBtn.innerHTML = `${getIcon("check", { size: 12 })} Copied Script!`;
+        setTimeout(() => { copyBtn.innerHTML = `${getIcon("copy", { size: 12 })} Copy Script`; }, 2000);
       });
     });
 
@@ -198,7 +199,7 @@ function renderAppGuideView() {
     <!-- Section 1: Choose Your Starting Path -->
     <div class="mb-4">
       <div class="flex-between mb-2">
-        <h4 class="text-espresso m-0">🧭 Where Should You Start? (Choose Your Path)</h4>
+        <h4 class="text-espresso m-0">${getIcon("compass", { size: 16, className: "mr-1 text-terracotta" })} Where Should You Start? (Choose Your Path)</h4>
         <span class="text-xs text-muted">Pick the card that fits you right now</span>
       </div>
 
@@ -211,12 +212,12 @@ function renderAppGuideView() {
               <strong class="text-espresso">"I only have 15 minutes today"</strong>
             </div>
             <p class="text-xs text-muted mb-3">
-              Click <strong>⚡ Missions</strong> in the top header or click the button below. 
+              Click <strong>Missions</strong> in the top header or click the button below. 
               Complete just today's single micro-task and call it a win!
             </p>
           </div>
           <button id="btn-help-go-missions" class="btn btn-secondary text-xs w-100">
-            ⚡ Open 15-Minute Daily Missions
+            ${getIcon("bolt", { size: 13 })} Open 15-Minute Daily Missions
           </button>
         </div>
 
@@ -233,7 +234,7 @@ function renderAppGuideView() {
             </p>
           </div>
           <button id="btn-help-go-step1" class="btn btn-primary text-xs w-100">
-            🚀 Go to Step 1 (Clarify Problem)
+            Go to Step 1 (Clarify Problem) →
           </button>
         </div>
 
@@ -250,7 +251,7 @@ function renderAppGuideView() {
             </p>
           </div>
           <button id="btn-help-go-stories" class="btn btn-secondary text-xs w-100">
-            🌟 Browse Real Founder Stories
+            ${getIcon("star", { size: 13 })} Browse Real Founder Stories
           </button>
         </div>
 
@@ -267,7 +268,7 @@ function renderAppGuideView() {
             </p>
           </div>
           <button id="btn-help-go-simulator" class="btn btn-secondary text-xs w-100">
-            🎮 Rehearse in Customer Simulator
+            ${getIcon("gamepad", { size: 13 })} Rehearse in Customer Simulator
           </button>
         </div>
       </div>
@@ -437,7 +438,7 @@ function renderEncouragerView(activeScenarioId, currentScenario) {
       <div class="card p-3 my-3 bg-white-soft border-warm">
         <div class="flex-between mb-1">
           <div class="flex items-center gap-2">
-            <span style="font-size: 1.2rem;" aria-hidden="true">✨</span>
+            ${getIcon("sparkle", { size: 14, className: "text-terracotta mr-1" })}
             <strong class="text-espresso text-xs">Facing a Specific Awkward Moment or Rejection?</strong>
           </div>
           <span class="badge badge-accent text-xs">Custom Setback Coach</span>
@@ -448,15 +449,15 @@ function renderEncouragerView(activeScenarioId, currentScenario) {
         <div class="flex gap-2">
           <input type="text" id="input-custom-setback" class="w-100 text-xs p-2 rounded border-warm" placeholder="e.g. A local business owner told me they already do this themselves on paper..." value="${escapeHtml(lastSetbackInputText)}">
           <button id="btn-ask-custom-setback" class="btn btn-primary text-xs" style="white-space: nowrap;">
-            ${isCoachingSetback ? "⏳ Diagnosing..." : "✨ Coach Me"}
+            ${isCoachingSetback ? "Diagnosing..." : `${getIcon("sparkle", { size: 13 })} Coach Me`}
           </button>
         </div>
 
         ${customSetbackResult ? `
           <div class="custom-setback-result mt-3 p-3 bg-sand-light rounded border-warm">
             <div class="flex-between mb-2">
-              <strong class="text-terracotta text-xs">🌱 Encourager Diagnosis & Exact Reply:</strong>
-              <button id="btn-clear-custom-setback" class="btn-link text-xs">✕ Close</button>
+              <strong class="text-terracotta text-xs">${getIcon("sprout", { size: 13, className: "mr-1" })} Encourager Diagnosis & Exact Reply:</strong>
+              <button id="btn-clear-custom-setback" class="btn-link text-xs">${getIcon("close", { size: 12 })} Close</button>
             </div>
             <div class="diagnosis-card mb-2 p-2 rounded bg-white-soft border-warm">
               <strong class="text-espresso text-xs">What this actually means:</strong>
@@ -482,7 +483,7 @@ function renderEncouragerView(activeScenarioId, currentScenario) {
         <div class="scenario-list-pane" id="help-tab-scenarios">
           ${alchemistScenarios.map(sc => `
             <button class="scenario-item-btn text-left ${sc.id === activeScenarioId ? "active-scenario" : ""}" data-id="${sc.id}">
-              <span class="scenario-title">💡 ${sc.title}</span>
+              <span class="scenario-title">${getIcon("lightbulb", { size: 13, className: "mr-1" })} ${sc.title}</span>
               <span class="scenario-snippet text-xs text-muted mt-1">${sc.symptom}</span>
             </button>
           `).join("")}
@@ -509,7 +510,7 @@ function renderEncouragerView(activeScenarioId, currentScenario) {
           <div class="action-card mb-3 p-3 rounded bg-white-soft border-warm">
             <div class="flex-between mb-1">
               <strong class="text-terracotta">A friendly script to say or send:</strong>
-              <button id="btn-copy-tab-script" class="btn-link text-xs">📋 Copy Script</button>
+              <button id="btn-copy-tab-script" class="btn-link text-xs">${getIcon("copy", { size: 12 })} Copy Script</button>
             </div>
             <p id="tab-script-text" class="text-sm font-italic mb-0 p-2 bg-oat rounded">
               "${currentScenario.actionPrompt}"

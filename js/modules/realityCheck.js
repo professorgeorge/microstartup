@@ -4,6 +4,7 @@
 import { store } from "../store.js";
 import { GOLDMINE_ZONES } from "../data/ideaSparks.js";
 import { callAi } from "../services/aiClient.js";
+import { getIcon } from "../services/icons.js";
 
 let isGoldminesOpen = false;
 let activeZoneId = "hate_doing_it";
@@ -55,7 +56,7 @@ export function renderStage1(container) {
       <div class="flex-between">
         <div>
           <span class="badge badge-accent mb-1">Inspiration Assistant</span>
-          <h3 class="panel-heading m-0">💡 Stuck for an Idea? Explore the 4 Everyday Goldmines</h3>
+          <h3 class="panel-heading m-0">${getIcon("lightbulb", { size: 14, className: "mr-1" })} Stuck for an Idea? Explore the 4 Everyday Goldmines</h3>
           <p class="text-xs text-muted mt-1 mb-0">
             Great micro-startups don't require high tech. Pick an everyday zone below to explore pre-tested starting seeds:
           </p>
@@ -93,7 +94,7 @@ export function renderStage1(container) {
                       <button class="btn btn-primary text-xs btn-use-spark" 
                         data-spark='${escapeHtml(JSON.stringify(sp))}'
                         title="Auto-fill this spark into Step 1">
-                        ⚡ Use This Spark
+                        ${getIcon("bolt", { size: 12 })} Use This Spark
                       </button>
                     </div>
                   </div>
@@ -155,7 +156,7 @@ export function renderStage1(container) {
             Create My Problem Statement (Formula)
           </button>
           <button id="btn-ai-refine-stage1" class="btn btn-secondary w-100 flex-center gap-2" ${aiRefining ? "disabled" : ""} style="border-color: var(--color-amber);">
-            <span>${aiRefining ? "⏳" : "✨"}</span>
+            <span>${aiRefining ? "⏳" : getIcon("sparkle", { size: 14 })}</span>
             <strong>${aiRefining ? "AI is Polishing Statements..." : "AI Jargon Slayer & Premise Refiner"}</strong>
           </button>
         </div>
@@ -163,8 +164,8 @@ export function renderStage1(container) {
         ${aiStage1Suggestions ? `
           <div class="card card-highlight p-3 border-warm mt-3 animate-fade-in" id="ai-stage1-suggestions-box">
             <div class="flex-between mb-2">
-              <strong class="text-terracotta text-xs font-bold">✨ AI Refined Problem Statements:</strong>
-              <button class="btn-icon text-xs" id="btn-dismiss-ai-stage1" title="Dismiss">✕</button>
+              <strong class="text-terracotta text-xs font-bold">${getIcon("sparkle", { size: 13, className: "mr-1" })} AI Refined Problem Statements:</strong>
+              <button class="btn-icon text-xs" id="btn-dismiss-ai-stage1" title="Dismiss">${getIcon("close", { size: 14 })}</button>
             </div>
             
             <div class="mb-3">
