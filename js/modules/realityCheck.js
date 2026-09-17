@@ -31,22 +31,34 @@ export function renderStage1(container) {
     </div>
 
     <!-- Example Template Picker -->
-    <div class="card card-oat mb-4 flex-between">
+    <div class="card card-oat mb-4 flex-between flex-wrap gap-3">
       <div>
         <strong>Explore Real Pre-Tested Examples:</strong> Choose a domain to see how validation works:
       </div>
       <div class="btn-row" style="flex-wrap: wrap; gap: 6px;">
-        <button class="btn btn-secondary text-xs btn-load-tmpl" data-template="plumber" title="Local Trade & Service Business">
+        <button class="btn btn-secondary text-xs btn-load-tmpl" data-template="plumber" title="Local Trade & Home Service Business">
           🔧 Solo Plumber (Trade)
         </button>
         <button class="btn btn-secondary text-xs btn-load-tmpl" data-template="baker" title="Cottage Food & Solo Maker">
           🎂 Home Baker (Maker)
         </button>
+        <button class="btn btn-secondary text-xs btn-load-tmpl" data-template="care" title="Solo Pet Care, Dog Walking & Personal Service">
+          🐾 Pet Care (Service)
+        </button>
+        <button class="btn btn-secondary text-xs btn-load-tmpl" data-template="farm" title="Urban Agriculture, Microgreens & Local Food">
+          🌿 Microgreens (Farm)
+        </button>
+        <button class="btn btn-secondary text-xs btn-load-tmpl" data-template="tutor" title="Private Tutoring, Music & Skill Coaching">
+          📚 Solo Tutor (Education)
+        </button>
+        <button class="btn btn-secondary text-xs btn-load-tmpl" data-template="repair" title="Mobile Bicycle Repair & Small Gear Maintenance">
+          🚲 Bike Repair (Repair)
+        </button>
         <button class="btn btn-secondary text-xs btn-load-tmpl" data-template="civic" title="Civic & Community Service Innovation">
-          🤝 Community ToolShare (Civic)
+          🤝 ToolShare (Civic)
         </button>
         <button class="btn btn-secondary text-xs btn-load-tmpl" data-template="tech" title="Freelancer Software & Micro-Tech">
-          💻 Freelance Assistant (Tech)
+          💻 Freelance Tool (Tech)
         </button>
       </div>
     </div>

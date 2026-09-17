@@ -619,6 +619,550 @@ export const SAMPLE_TEMPLATES = {
     },
     completedMissions: ["m1", "m2", "m3", "m4", "m5", "m6", "m7", "m8", "m9", "m10"],
     hasCompletedSimulator: true
+  },
+
+  care: {
+    name: "PawsRoute (Solo Dog Walker & Pet Care)",
+    stage1: {
+      rawIdea: "I want to help solo dog walkers and pet sitters keep lockbox codes, pet medication rules, and walk update photos organized in one place instead of scattered across 30 customer text threads.",
+      targetAudience: "Independent solo dog walkers and neighborhood pet sitters caring for 10 to 25 client pets weekly",
+      currentWorkaround: "Searching through endless SMS message history on phone while standing at customer front doors trying to find the front porch lockbox code or alarm PIN",
+      tangibleCost: "Forgetting a senior dog's noon medication, losing client keys, or spending 1.5 unpaid hours every evening texting individual walk photo updates to anxious pet parents",
+      problemHypothesis: "Solo pet sitters suffer high daily anxiety and risk pet safety because entry codes, feeding schedules, and emergency vet numbers are buried in chat threads, resulting in frantic front-door delays and lost client trust.",
+      elevatorPremise: "For solo pet sitters tired of hunting for lockbox codes at the front door, PawsRoute is a private 1-tap client clipboard that displays entry codes, feeding rules, and sends 1-click photo walk updates.",
+      isCompleted: true
+    },
+    stage2: {
+      interviews: [
+        {
+          id: "int_p1",
+          contactName: "Brenda C. (Happy Paws Walking)",
+          channel: "Local dog park conversation",
+          date: "2026-03-02",
+          pastWorkaround: "Relies on phone notes app, but client changed garage door PIN without texting the new code.",
+          painScore: 5,
+          spentLastMonth: "$0 on software, lost 2 hours waiting in the rain",
+          keyQuote: "I walk 18 dogs. When a client changes their garage code and forgets to tell me, my whole afternoon schedule collapses while the dog barks inside.",
+          willingToPaySignal: true,
+          tags: ["Severe Stress", "Time Sink"]
+        },
+        {
+          id: "int_p2",
+          contactName: "Derek V. (Bark & Stroll)",
+          channel: "Pet supply bulletin board connection",
+          date: "2026-03-04",
+          pastWorkaround: "Used Rover, but hates losing 20% of every walk fee from his direct recurring neighborhood clients.",
+          painScore: 5,
+          spentLastMonth: "$480 in platform commissions taken from his direct clients",
+          keyQuote: "Rover is fine for finding a stranger once, but taking 20% every week from Mrs. Higgins whose dog I have walked for 3 years is ridiculous.",
+          willingToPaySignal: true,
+          tags: ["Losing Money", "Platform Fees"]
+        },
+        {
+          id: "int_p3",
+          contactName: "Jenny M. (Purrs & Paws Sitting)",
+          channel: "Neighborhood Facebook community post",
+          date: "2026-03-06",
+          pastWorkaround: "Keeps paper index cards in car glovebox.",
+          painScore: 4,
+          spentLastMonth: "$0",
+          keyQuote: "Owners want a photo update after every single visit. Texting 14 owners individually each day takes 45 minutes of my personal family evening.",
+          willingToPaySignal: true,
+          tags: ["Time Sink", "Needs Phone Friendly"]
+        },
+        {
+          id: "int_p4",
+          contactName: "Frank L. (Occasional walker for sister)",
+          channel: "Casual neighborhood chat",
+          date: "2026-03-08",
+          pastWorkaround: "Just walks his sister's dog on Tuesdays.",
+          painScore: 1,
+          spentLastMonth: "$0",
+          keyQuote: "I just walk one beagle for family. I have no need for a system.",
+          willingToPaySignal: false,
+          tags: ["Zero Interest", "Wrong Audience"]
+        },
+        {
+          id: "int_p5",
+          contactName: "Samantha D. (Westside Pet Care)",
+          channel: "Veterinary clinic bulletin board",
+          date: "2026-03-10",
+          pastWorkaround: "Tried generic CRM, but it lacked pet allergy and vet fields.",
+          painScore: 4,
+          spentLastMonth: "$29 on generic field service app (canceled)",
+          keyQuote: "If the client can fill out their emergency vet, lockbox code, and food scoops once, and I can tap one button to send a photo report card, I would pay $24/month gladly.",
+          willingToPaySignal: true,
+          tags: ["Wants It Yesterday", "Will Pay Monthly"]
+        }
+      ],
+      targetGoal: 20,
+      minGateGoal: 5,
+      isCompleted: true
+    },
+    stage3: {
+      canvas: {
+        problem: "Scattered lockbox codes, alarm codes, pet medication rules, and time-consuming manual photo texting across 20+ individual client chats.",
+        existingAlternatives: "Paper index cards in glove compartments, 20% Rover/Wag platform fees, or digging through personal text history.",
+        customerSegments: "Solo independent dog walkers, cat sitters, and neighborhood pet care operators.",
+        earlyAdopters: "Walkers with 10+ recurring weekly clients who manage their own keys and client invoicing.",
+        uniqueValueProposition: "Zero platform commission. 1-tap access to gate codes and pet care rules, plus 1-click photo walk report cards.",
+        solution: "Lightweight mobile web card where pet parents log emergency vet & key details once; walker taps 1 button to send a cute photo update.",
+        channels: "Local dog park bulletin boards, veterinary clinic reception desks, neighborhood pet groups, mobile groomer referrals.",
+        revenueStreams: "$24/month flat subscription per solo walker for unlimited pets (zero percentage cut on walks).",
+        costStructure: "Photo cloud storage ($10/mo), web hosting ($15/mo), payment processing fees (2.9%).",
+        keyMetrics: "Walk report cards sent per active walker, daily active walkers, zero missed medication alerts.",
+        unfairAdvantage: "Founder has 4 years of local pet sitting experience and established friendships with 3 local veterinary tech clinics."
+      },
+      isCompleted: true
+    },
+    stage4: {
+      selectedExperimentId: "concierge_test",
+      experimentName: "Manual Daily Walk Report Card Pilot for Brenda & Derek",
+      visitorCount: 22,
+      conversionCount: 8,
+      preorderCount: 60,
+      experimentNotes: "Created simple web link report cards for Brenda's top 5 clients. Pet owners loved the cute 1-click photo summary. Both walkers prepaid $30 for a 2-month pilot.",
+      evaluatorResult: {
+        verdict: "GREEN: Clear Go Ahead Signal",
+        badgeClass: "badge-success",
+        explanation: "Solo walkers confirmed intense daily frustration with scattered text updates and high platform cuts. Multiple walkers paid cash deposits upfront.",
+        nextSteps: "Move to Step 5 to configure your starter budget and explore small business grants."
+      },
+      isCompleted: true
+    },
+    stage5: {
+      readinessChecks: {
+        check_problem: true,
+        check_interviews: true,
+        check_canvas: true,
+        check_cheap_test: true,
+        check_budget: true
+      },
+      microBudgetItems: [
+        { id: "b1", description: "Domain name and simple web card hosting", amount: 35 },
+        { id: "b2", description: "Dog park promotional cards & branded poop bag clips", amount: 50 },
+        { id: "b3", description: "Healthy dog treat samples for dog park chats", amount: 30 },
+        { id: "b4", description: "Buffer for small initial operating expenses", amount: 60 }
+      ],
+      selectedFundingTarget: "amber_grant",
+      isCompleted: true
+    },
+    napkinMath: {
+      targetMonthlyIncome: 1800,
+      pricePerUnit: 24,
+      fixedExpenses: 35,
+      unitLabel: "active solo walkers"
+    },
+    completedMissions: ["m1", "m2", "m3", "m4", "m5", "m6", "m7", "m8", "m9", "m10"],
+    hasCompletedSimulator: true
+  },
+
+  farm: {
+    name: "SproutBox (Neighborhood Microgreen Subscriptions)",
+    stage1: {
+      rawIdea: "I want to help urban micro-farmers and indoor growers sell fresh weekly salad greens and microgreen trays directly to local families on recurring subscription without wasting harvest.",
+      targetAudience: "Urban indoor farmers and small market gardeners selling fresh salad greens within a 5-mile radius",
+      currentWorkaround: "Harvesting based on guesswork, showing up to Saturday farmers markets praying for good weather, and throwing away 35% of unsold perishable greens by Sunday night",
+      tangibleCost: "Throwing away $180 in unsold fresh microgreen crops every weekend, plus 6 hours sitting at slow farmers market booths",
+      problemHypothesis: "Small local urban growers lose up to a third of their perishable harvest every week because selling at open-air markets is unpredictable, and coordinating weekly doorstep deliveries via Instagram DMs is chaotic.",
+      elevatorPremise: "For suburban families who want farm-fresh greens without grocery store plastic, SproutBox provides a simple weekly neighborhood doorstep harvest subscription that eliminates farm food waste.",
+      isCompleted: true
+    },
+    stage2: {
+      interviews: [
+        {
+          id: "int_f1",
+          contactName: "Liam K. (Basement Greens Farm)",
+          channel: "Urban agriculture meetup",
+          date: "2026-03-01",
+          pastWorkaround: "Harvested 40 trays of pea shoots; rain canceled farmers market; had to compost 30 trays.",
+          painScore: 5,
+          spentLastMonth: "$150 on market booth fees and lost crop seed",
+          keyQuote: "Microgreens wilt in 4 days. If I don't have pre-committed buyers before I plant the seeds, I'm just throwing cash in the compost.",
+          willingToPaySignal: true,
+          tags: ["Severe Waste", "Losing Money"]
+        },
+        {
+          id: "int_f2",
+          contactName: "Maya S. (Health Coach & Mom of 3)",
+          channel: "School garden committee chat",
+          date: "2026-03-03",
+          pastWorkaround: "Buys plastic clamshells at supermarket that turn slimy in 48 hours.",
+          painScore: 4,
+          spentLastMonth: "$28/week on store greens",
+          keyQuote: "Store greens are already 10 days old when you buy them. I would love a fresh jar dropped on my porch Tuesday mornings.",
+          willingToPaySignal: true,
+          tags: ["Customer Demand", "Freshness First"]
+        },
+        {
+          id: "int_f3",
+          contactName: "Chef Antoine (Bistro 44 Owner)",
+          channel: "Direct restaurant kitchen visit",
+          date: "2026-03-05",
+          pastWorkaround: "Orders from broadline distributor; herbs arrive bruised and crushed.",
+          painScore: 4,
+          spentLastMonth: "$220 on broadline distributor produce",
+          keyQuote: "If a local grower guarantees Tuesday 9 AM delivery of fresh radish and pea shoots, I will sign a standing monthly purchase order.",
+          willingToPaySignal: true,
+          tags: ["Commercial Buyer", "Reliable Delivery"]
+        },
+        {
+          id: "int_f4",
+          contactName: "Tom H. (Fast food diner)",
+          channel: "Coffee shop line chat",
+          date: "2026-03-07",
+          pastWorkaround: "Rarely eats fresh salads.",
+          painScore: 1,
+          spentLastMonth: "$0",
+          keyQuote: "I mostly eat drive-thru, fresh greens aren't my thing.",
+          willingToPaySignal: false,
+          tags: ["Zero Interest", "Wrong Audience"]
+        },
+        {
+          id: "int_f5",
+          contactName: "Rachel B. (Suburban Cul-de-Sac Pod Leader)",
+          channel: "Neighborhood porch gathering",
+          date: "2026-03-09",
+          pastWorkaround: "Drives 25 minutes to an organic co-op on weekends.",
+          painScore: 5,
+          spentLastMonth: "$60 on specialty grocery trips",
+          keyQuote: "If you drop off one insulated cooler at my garage on Thursday, 8 neighbors on our street will pick up their weekly jars and pay automatically.",
+          willingToPaySignal: true,
+          tags: ["Group Buyer", "Wants It Yesterday"]
+        }
+      ],
+      targetGoal: 20,
+      minGateGoal: 5,
+      isCompleted: true
+    },
+    stage3: {
+      canvas: {
+        problem: "Unsold harvest waste, unpredictable farmers market weather, and plastic grocery store greens rotting in 48 hours.",
+        existingAlternatives: "Supermarket plastic clamshells ($4.99/pack, already wilted), sporadic weekend farmers markets, or ad-hoc cash sales.",
+        customerSegments: "Health-conscious suburban parents, local independent farm-to-table chefs, neighborhood fitness groups.",
+        earlyAdopters: "Families living within 3 miles of the grower who already buy organic produce or belong to a community gym.",
+        uniqueValueProposition: "Harvested this morning, on your doorstep by noon. Zero plastic waste in reusable mason jars.",
+        solution: "Weekly doorstep microgreen subscription: 2 fresh varieties delivered in sanitized glass jars with porch cooler exchange.",
+        channels: "Cul-de-sac neighborhood flyers, community gym sample tastings, local elementary school eco-fair, Nextdoor porch drop announcements.",
+        revenueStreams: "$15/week standard family subscription or $55/month standing order.",
+        costStructure: "Seeds and organic soil substrate ($1.20/tray), reusable mason jars ($1.50 each one-time), delivery bike/fuel ($15/wk).",
+        keyMetrics: "Subscriber churn under 5%, harvest yield efficiency over 92%, average customer lifetime 6+ months.",
+        unfairAdvantage: "Zero commercial retail rent (grown in insulated home nursery) and established connection with local fitness studio."
+      },
+      isCompleted: true
+    },
+    stage4: {
+      selectedExperimentId: "preorder_deposit",
+      experimentName: "Cul-de-Sac 2-Week Porch Harvest Pilot",
+      visitorCount: 25,
+      conversionCount: 11,
+      preorderCount: 165,
+      experimentNotes: "Brought 3 freshly cut microgreen sample trays to cul-de-sac block party. 11 families pre-paid $15 for a 2-week trial subscription on the spot.",
+      evaluatorResult: {
+        verdict: "GREEN: Clear Go Ahead Signal",
+        badgeClass: "badge-success",
+        explanation: "11 families paid upfront cash deposits before the seeds were sown. Strong demand for ultra-fresh zero-waste food verified.",
+        nextSteps: "Move to Step 5 to check your starter supply budget and apply for USDA or local sustainable micro-grants."
+      },
+      isCompleted: true
+    },
+    stage5: {
+      readinessChecks: {
+        check_problem: true,
+        check_interviews: true,
+        check_canvas: true,
+        check_cheap_test: true,
+        check_budget: true
+      },
+      microBudgetItems: [
+        { id: "b1", description: "24 Reusable wide-mouth mason jars and custom waterproof lid labels", amount: 45 },
+        { id: "b2", description: "Organic seed sampler (sunflower, pea, radish, broccoli)", amount: 35 },
+        { id: "b3", description: "Insulated porch cooler bags", amount: 40 },
+        { id: "b4", description: "Delivery route flyer prints", amount: 20 }
+      ],
+      selectedFundingTarget: "prime_cdfi",
+      isCompleted: true
+    },
+    napkinMath: {
+      targetMonthlyIncome: 1500,
+      pricePerUnit: 55,
+      fixedExpenses: 80,
+      unitLabel: "monthly doorstep subscribers"
+    },
+    completedMissions: ["m1", "m2", "m3", "m4", "m5", "m6", "m7", "m8", "m9", "m10"],
+    hasCompletedSimulator: true
+  },
+
+  tutor: {
+    name: "TutorSync (Solo Tutor & Music Coach)",
+    stage1: {
+      rawIdea: "I want to help solo private academic tutors and music teachers stop losing hundreds of dollars from last-minute cancellations, awkward payment chasing, and forgotten homework.",
+      targetAudience: "Solo private math tutors, language teachers, and music instructors teaching 8 to 25 weekly students",
+      currentWorkaround: "Texting parents the night before sessions, collecting cash in crumpled envelopes, and feeling guilty when parents cancel 20 minutes before a session",
+      tangibleCost: "Losing 3 unbilled cancellation slots per week worth $150 to $250, plus 3 hours each Sunday evening sending awkward Venmo reminder texts",
+      problemHypothesis: "Independent tutors lose up to 25% of their weekly income because families cancel last-minute without payment, and tutors lack a professional, automated policy system to collect upfront lesson deposits.",
+      elevatorPremise: "For solo private tutors tired of awkward payment reminders and empty canceled slots, TutorSync is a 1-link parent booking portal with automatic reminder texts and upfront monthly reservations.",
+      isCompleted: true
+    },
+    stage2: {
+      interviews: [
+        {
+          id: "int_u1",
+          contactName: "David H. (High School Chemistry Tutor)",
+          channel: "Library study room chat",
+          date: "2026-03-02",
+          pastWorkaround: "Drove 25 minutes across town, parent texted 10 minutes prior that son had soccer practice.",
+          painScore: 5,
+          spentLastMonth: "$0, lost $180 in unbilled late cancellations",
+          keyQuote: "I sat in their driveway and got a text saying 'sorry forgot soccer'. I earned $0 and burned half a tank of gas. It happens every single week.",
+          willingToPaySignal: true,
+          tags: ["Losing Money", "Severe Stress"]
+        },
+        {
+          id: "int_u2",
+          contactName: "Maria T. (Piano & Violin Instructor)",
+          channel: "Local music teachers guild meetup",
+          date: "2026-03-04",
+          pastWorkaround: "Asks for checks at lesson end in front of the kids.",
+          painScore: 4,
+          spentLastMonth: "$0",
+          keyQuote: "Asking for checks in front of an 8-year-old student feels undignified. Parents say 'I forgot my checkbook' and I wait 3 weeks to get paid.",
+          willingToPaySignal: true,
+          tags: ["Social Friction", "Late Payments"]
+        },
+        {
+          id: "int_u3",
+          contactName: "Brian S. (SAT Test Prep Tutor)",
+          channel: "Freelance educators forum",
+          date: "2026-03-06",
+          pastWorkaround: "Tried using Calendly + Stripe, but found setting up multiple Zoom links and lesson notes too complicated.",
+          painScore: 4,
+          spentLastMonth: "$24/mo on disjointed software tools",
+          keyQuote: "I need something simple: one link where parents see available hours, pay monthly upfront, and get a 2-sentence note on what to practice.",
+          willingToPaySignal: true,
+          tags: ["Tried Other Tools", "Needs Simplicity"]
+        },
+        {
+          id: "int_u4",
+          contactName: "Claire P. (Full-time public school teacher)",
+          channel: "School teachers lounge conversation",
+          date: "2026-03-08",
+          pastWorkaround: "Does not tutor privately on the side.",
+          painScore: 1,
+          spentLastMonth: "$0",
+          keyQuote: "I grade papers until 8 PM, I do not take on private students.",
+          willingToPaySignal: false,
+          tags: ["Zero Interest", "Wrong Audience"]
+        },
+        {
+          id: "int_u5",
+          contactName: "Anita G. (Spanish Language Coach)",
+          channel: "Community college bulletin board",
+          date: "2026-03-10",
+          pastWorkaround: "Switched to requiring monthly payments on the 1st.",
+          painScore: 5,
+          spentLastMonth: "$0",
+          keyQuote: "When I required parents to pay on the 1st of the month for 4 sessions, late cancellations dropped by 80% immediately!",
+          willingToPaySignal: true,
+          tags: ["Wants It Yesterday", "Will Pay Monthly"]
+        }
+      ],
+      targetGoal: 20,
+      minGateGoal: 5,
+      isCompleted: true
+    },
+    stage3: {
+      canvas: {
+        problem: "Last-minute parent cancellations, awkward payment chasing, and forgotten student practice homework.",
+        existingAlternatives: "Awkward Venmo requests, paper checks, or rigid corporate tutoring platforms that take a 30% cut (Wyzant).",
+        customerSegments: "Solo private academic tutors (STEM, SAT, reading) and private music/arts instructors.",
+        earlyAdopters: "Tutors with at least 8 weekly students who currently drive to students' homes or teach over Zoom.",
+        uniqueValueProposition: "Keep 100% of your hourly rate. Automated lesson reminders, upfront monthly session reservations, and student lesson notes.",
+        solution: "Simple booking link: parents reserve recurring monthly slots, card is billed on the 1st, and tutor taps 2 bullet points for the parent after each session.",
+        channels: "School PTA newsletters, library tutoring corkboards, parent WhatsApp groups, music store bulletin boards.",
+        revenueStreams: "$19/month flat fee per tutor, or $160/year.",
+        costStructure: "Web hosting ($15/mo), SMS notification fees ($5/mo), payment gateway fees (2.9%).",
+        keyMetrics: "Cancellation rate under 5%, on-time payment rate over 95%, average weekly booked hours.",
+        unfairAdvantage: "Founder has 6 years of private tutoring experience and personal recommendation network across 4 school districts."
+      },
+      isCompleted: true
+    },
+    stage4: {
+      selectedExperimentId: "concierge_test",
+      experimentName: "Monthly Advance Billing Pilot for David & Maria",
+      visitorCount: 18,
+      conversionCount: 7,
+      preorderCount: 95,
+      experimentNotes: "Created simple 1-page monthly billing agreements for David's 5 chemistry students. All 5 families happily agreed to pay on the 1st via automated link. Zero cancellations occurred that month.",
+      evaluatorResult: {
+        verdict: "GREEN: Clear Go Ahead Signal",
+        badgeClass: "badge-success",
+        explanation: "Parents accepted upfront monthly booking without pushback, and tutors eliminated unbilled late cancellations immediately.",
+        nextSteps: "Proceed to Step 5 to review the minimal starter budget and apply for education micro-grants."
+      },
+      isCompleted: true
+    },
+    stage5: {
+      readinessChecks: {
+        check_problem: true,
+        check_interviews: true,
+        check_canvas: true,
+        check_cheap_test: true,
+        check_budget: true
+      },
+      microBudgetItems: [
+        { id: "b1", description: "Domain & booking page builder", amount: 30 },
+        { id: "b2", description: "SMS gateway credit pool for parent appointment reminders", amount: 25 },
+        { id: "b3", description: "PTA newsletter sponsorship ad", amount: 40 },
+        { id: "b4", description: "Buffer fund for initial setup", amount: 55 }
+      ],
+      selectedFundingTarget: "prime_cdfi",
+      isCompleted: true
+    },
+    napkinMath: {
+      targetMonthlyIncome: 2200,
+      pricePerUnit: 50,
+      fixedExpenses: 40,
+      unitLabel: "weekly tutoring hours"
+    },
+    completedMissions: ["m1", "m2", "m3", "m4", "m5", "m6", "m7", "m8", "m9", "m10"],
+    hasCompletedSimulator: true
+  },
+
+  repair: {
+    name: "PedalFix (Mobile Bicycle & Small Gear Tune-Up)",
+    stage1: {
+      rawIdea: "I want to help busy families get their neglected bicycles, lawnmowers, and strollers tuned and repaired right in their own driveway without wrestling them into a car trunk.",
+      targetAudience: "Suburban families and commuters with 2 to 5 flat-tire bikes or small engine gear sitting unused in the garage",
+      currentWorkaround: "Letting flat bikes sit in the garage for 2 years because hoisting 4 bikes onto a car rack and waiting 3 weeks at an expensive bike shop is too painful",
+      tangibleCost: "Paying $120+ per bike at downtown specialty shops, plus losing sunny summer weekends when kids can't ride",
+      problemHypothesis: "Millions of suburban families have bicycles sitting idle in garages because transporting bulky bikes to traditional bike shops is an enormous hassle and wait times are weeks long.",
+      elevatorPremise: "For busy parents with flat-tire bikes rotting in the garage, PedalFix is a mobile driveway tune-up service that fixes gears, brakes, and tires on-site in 45 minutes while you stay inside.",
+      isCompleted: true
+    },
+    stage2: {
+      interviews: [
+        {
+          id: "int_r1",
+          contactName: "Mark B. (Suburban Father of 3)",
+          channel: "Driveway chat while walking dogs",
+          date: "2026-03-01",
+          pastWorkaround: "Has 4 bikes with flat tires and slipping chains that haven't been ridden in 2 years.",
+          painScore: 5,
+          spentLastMonth: "$0 in 2 years because loading 4 bikes into an SUV was impossible",
+          keyQuote: "The bikes have been flat since 2023. If someone pulls up in my driveway on a Saturday and tunes them all up for $140, I would hand over the cash in two seconds.",
+          willingToPaySignal: true,
+          tags: ["High Friction", "Wants It Yesterday"]
+        },
+        {
+          id: "int_r2",
+          contactName: "Lisa K. (Triathlon Racer)",
+          channel: "Specialty bike shop parking lot",
+          date: "2026-03-03",
+          pastWorkaround: "Uses master mechanic at downtown racing boutique.",
+          painScore: 1,
+          spentLastMonth: "$350 on carbon frame tune-up",
+          keyQuote: "I only let a master certified mechanic touch my $6,000 racing bike.",
+          willingToPaySignal: false,
+          tags: ["Wrong Target", "High End Niche"]
+        },
+        {
+          id: "int_r3",
+          contactName: "Dan C. (Suburban Commuter)",
+          channel: "Train station bicycle rack",
+          date: "2026-03-05",
+          pastWorkaround: "Brake pads wore out; had to take Uber to work for 4 days.",
+          painScore: 5,
+          spentLastMonth: "$75 on Uber rides while bike was unusable",
+          keyQuote: "I couldn't ride to the station for a week. A 20-minute on-site brake pad swap saved my daily commute.",
+          willingToPaySignal: true,
+          tags: ["Losing Money", "Daily Commute"]
+        },
+        {
+          id: "int_r4",
+          contactName: "Sarah W. (Neighborhood HOA Board Member)",
+          channel: "HOA community newsletter meeting",
+          date: "2026-03-07",
+          pastWorkaround: "Helped organize a neighborhood safety day.",
+          painScore: 4,
+          spentLastMonth: "$0",
+          keyQuote: "If you set up your mobile repair stand at the neighborhood park on Saturday, 30 families will line up for brake adjustments and safety checks.",
+          willingToPaySignal: true,
+          tags: ["Community Partner", "High Volume"]
+        },
+        {
+          id: "int_r5",
+          contactName: "Greg M. (Retired DIY tinkerer)",
+          channel: "Neighborhood garage sale",
+          date: "2026-03-09",
+          pastWorkaround: "Maintains his own tools and fixes his own chains in the basement.",
+          painScore: 1,
+          spentLastMonth: "$0",
+          keyQuote: "I have my own bike stand and grease. I enjoy wrenching on my own bike.",
+          willingToPaySignal: false,
+          tags: ["Zero Interest", "DIY Mechanic"]
+        }
+      ],
+      targetGoal: 20,
+      minGateGoal: 5,
+      isCompleted: true
+    },
+    stage3: {
+      canvas: {
+        problem: "Bulky bikes trapped in garages with flat tires; hassle of loading them into cars; 3-week delays at retail bike shops.",
+        existingAlternatives: "Traditional retail bike shops ($90-$150/tune-up + 2 week wait), DIY YouTube struggles, or abandoning bikes in the garage.",
+        customerSegments: "Suburban families with multiple children, recreational commuters, neighborhood retiree cyclists.",
+        earlyAdopters: "Neighborhood families with 2+ bikes needing basic spring tune-ups (tubes, cables, chain lubrication, brake adjustments).",
+        uniqueValueProposition: "We come to your driveway. Complete safety inspection, gear tuning, and new tubes in 45 minutes while you relax at home.",
+        solution: "Mobile repair service van/trailer with mobile workstand and standardized packages ($45 single bike, $129 family 3-bike bundle).",
+        channels: "Cul-de-sac driveway yard signs while working, elementary school bike-to-school day flyers, neighborhood Nextdoor posts.",
+        revenueStreams: "Driveway tune-up packages ($45-$129), inner tube and tire sales, accessory add-ons (lights, bells, helmets).",
+        costStructure: "Replacement tubes, cables, brake pads ($8/bike wholesale), mobile tool kit ($120 one-time), van fuel ($20/wk).",
+        keyMetrics: "Average revenue per driveway stop ($95+), same-day repeat booking referrals, 100% 5-star Google review rating.",
+        unfairAdvantage: "Mobile on-site presence turns every driveway job into 3 immediate neighbor bookings who walk over to ask questions."
+      },
+      isCompleted: true
+    },
+    stage4: {
+      selectedExperimentId: "concierge_test",
+      experimentName: "Saturday Morning Driveway Tune-Up Pilot on Maple Street",
+      visitorCount: 14,
+      conversionCount: 6,
+      preorderCount: 210,
+      experimentNotes: "Set up bike repair stand in Mark's driveway. While working on his 3 family bikes, 3 neighbors walked over with their kids' bikes. Repaired 6 bikes in 4 hours and collected $210 in cash.",
+      evaluatorResult: {
+        verdict: "GREEN: Clear Go Ahead Signal",
+        badgeClass: "badge-success",
+        explanation: "Everyday suburban families eagerly paid for driveway convenience. On-site work generated spontaneous neighborhood word-of-mouth.",
+        nextSteps: "Move to Step 5 to outline a portable tool kit budget and explore local small business loans."
+      },
+      isCompleted: true
+    },
+    stage5: {
+      readinessChecks: {
+        check_problem: true,
+        check_interviews: true,
+        check_canvas: true,
+        check_cheap_test: true,
+        check_budget: true
+      },
+      microBudgetItems: [
+        { id: "b1", description: "Portable heavy-duty bike repair stand", amount: 55 },
+        { id: "b2", description: "Bulk inner tubes (assorted sizes) and chain lubricant", amount: 45 },
+        { id: "b3", description: "Neighborhood flyer printouts and magnetic vehicle sign", amount: 35 },
+        { id: "b4", description: "Replacement cable and brake pad buffer fund", amount: 45 }
+      ],
+      selectedFundingTarget: "prime_cdfi",
+      isCompleted: true
+    },
+    napkinMath: {
+      targetMonthlyIncome: 2400,
+      pricePerUnit: 95,
+      fixedExpenses: 120,
+      unitLabel: "driveway tune-up stops"
+    },
+    completedMissions: ["m1", "m2", "m3", "m4", "m5", "m6", "m7", "m8", "m9", "m10"],
+    hasCompletedSimulator: true
   }
 };
 
