@@ -2,7 +2,7 @@
 // Re-organized with clean information hierarchy: Progress first, unified Conversation Coach, and rapid logging.
 
 import { store } from "../store.js";
-import { callAi } from "../services/aiClient.js";
+import { callAi, generateCustomOutreach } from "../services/aiClient.js";
 
 const QUICK_TAGS = [
   "Losing Money", "Severe Stress", "Tried Other Tools", 
@@ -11,10 +11,38 @@ const QUICK_TAGS = [
 
 let selectedTags = [];
 let activeScriptTab = "sms";
+let tailoredAiScripts = null;
+let isTailoringScripts = false;
 
 function getOutreachScripts(audience, workaround) {
   const cleanAudience = audience || "people who deal with this";
   const cleanWorkaround = workaround || "handling this manually";
+
+  if (tailoredAiScripts) {
+    return {
+      sms: {
+        title: "💬 Tailored WhatsApp / SMS",
+        badge: "✨ AI-Tailored for your specific audience",
+        target: "SMS or WhatsApp message",
+        text: tailoredAiScripts.whatsapp,
+        why: "💡 Why this works: Personalized to their specific headache while strictly respecting The Mom Test (no sales pitch, asks about past behavior)."
+      },
+      inperson: {
+        title: "🤝 Tailored In-Person Opener",
+        badge: "✨ AI-Tailored casual question",
+        target: "Face-to-face quick inquiry",
+        text: tailoredAiScripts.inPerson,
+        why: "💡 Why this works: Natural, non-salesy opening that lowers defenses and invites authentic storytelling without pitching."
+      },
+      community: {
+        title: "✉️ Tailored Email / DM",
+        badge: "✨ AI-Tailored outreach email",
+        target: "Email or Direct Message",
+        text: tailoredAiScripts.email,
+        why: "💡 Why this works: Brief, humble, and asks for advice rather than a purchase."
+      }
+    };
+  }
 
   return {
     sms: {
@@ -182,13 +210,23 @@ export function renderStage2(container) {
 
     <!-- 3. The 1-Click Outreach Script Generator -->
     <div class="card card-oat mb-4" id="outreach-script-generator">
-      <div class="flex-between mb-2">
+      <div class="flex-between flex-wrap gap-2 mb-2">
         <div>
           <span class="badge badge-accent mb-1">Outreach Toolkit</span>
           <h4 class="m-0 text-espresso text-sm font-bold">1-Click Outreach Script Generator</h4>
           <p class="text-xs text-muted mb-0 mt-1">
             Worried about sounding awkward or like a salesperson? Use these friendly, field-tested scripts tailored to your idea.
           </p>
+        </div>
+        <div class="flex-row items-center gap-2">
+          ${tailoredAiScripts ? `
+            <button id="btn-reset-outreach-scripts" class="btn btn-secondary text-xs" title="Restore default field-tested templates">
+              ↺ Reset to Defaults
+            </button>
+          ` : ""}
+          <button id="btn-ai-tailor-outreach" class="btn btn-secondary text-xs" title="Generate custom Mom Test outreach scripts tailored to your specific audience">
+            ${isTailoringScripts ? "⏳ Tailoring Scripts..." : "✨ Tailor Scripts with AI"}
+          </button>
         </div>
       </div>
 
@@ -394,6 +432,41 @@ function attachStage2Events(container, cheatSheetText) {
       activeScriptTab = e.currentTarget.getAttribute("data-script");
       renderStage2(container);
     });
+  });
+
+  // AI Tailored Outreach Scripts
+  container.querySelector("#btn-reset-outreach-scripts")?.addEventListener("click", () => {
+    tailoredAiScripts = null;
+    activeScriptTab = "sms";
+    renderStage2(container);
+  });
+
+  container.querySelector("#btn-ai-tailor-outreach")?.addEventListener("click", async () => {
+    if (!store.isAiConfigured()) {
+      if (confirm("✨ AI Co-Pilot is not configured yet. Would you like to connect an AI provider (OpenAI, Gemini, Claude, Grok, or local Ollama) to generate tailored outreach scripts for your audience?")) {
+        window.dispatchEvent(new CustomEvent("app:open-ai-settings"));
+      }
+      return;
+    }
+
+    isTailoringScripts = true;
+    renderStage2(container);
+
+    try {
+      const s1 = store.state.stage1;
+      const res = await generateCustomOutreach({
+        audience: s1.targetAudience || "people dealing with this",
+        problem: s1.currentWorkaround || s1.painStory || "handling this manually",
+        ideaName: store.state.name
+      });
+      tailoredAiScripts = res;
+      activeScriptTab = "sms";
+    } catch (err) {
+      alert("Could not tailor outreach scripts: " + (err.message || String(err)));
+    } finally {
+      isTailoringScripts = false;
+      renderStage2(container);
+    }
   });
 
   container.querySelector("#btn-launch-sim-step2")?.addEventListener("click", () => {

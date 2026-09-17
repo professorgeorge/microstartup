@@ -2,7 +2,20 @@
 // Streamlined with quick auto-fill, formatted preview access, and evidence markers.
 
 import { store } from "../store.js";
-import { callAi } from "../services/aiClient.js";
+import { callAi, suggestPricingTiers } from "../services/aiClient.js";
+
+let activePricingTiers = null;
+let isSuggestingTiers = false;
+
+function escapeHtml(str) {
+  if (!str) return "";
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
 
 export function renderStage3(container) {
   const s3 = store.state.stage3;
@@ -142,7 +155,7 @@ export function renderStage3(container) {
 
     <!-- Pocket Napkin Math Calculator -->
     <div class="card card-highlight mb-4" id="napkin-math-card">
-      <div class="flex-between mb-2">
+      <div class="flex-between flex-wrap gap-2 mb-2">
         <div>
           <span class="badge badge-accent mb-1">Financial Clarity</span>
           <h3 class="panel-heading m-0">Pocket Napkin Math: How Many Customers Do You Actually Need?</h3>
@@ -150,9 +163,19 @@ export function renderStage3(container) {
             Forget complex 5-year spreadsheets. Turn your monthly income target into an achievable, reachable daily customer pace.
           </p>
         </div>
-        <button id="btn-apply-napkin-to-canvas" class="btn btn-secondary text-xs" title="Copy these numbers into the Revenue box above">
-          ⚡ Apply to Revenue Box
-        </button>
+        <div class="flex-row items-center gap-2">
+          ${activePricingTiers ? `
+            <button id="btn-clear-pricing-tiers" class="btn btn-secondary text-xs" title="Hide suggested packages">
+              ✕ Close Packages
+            </button>
+          ` : ""}
+          <button id="btn-ai-pricing-tiers" class="btn btn-secondary text-xs" title="Suggest 3 structured packaging tiers (Starter, Core, VIP) with instant math calculations">
+            ${isSuggestingTiers ? "⏳ Analyzing Packages..." : "✨ Suggest 3 Pricing Packages"}
+          </button>
+          <button id="btn-apply-napkin-to-canvas" class="btn btn-secondary text-xs" title="Copy these numbers into the Revenue box above">
+            ⚡ Apply to Revenue Box
+          </button>
+        </div>
       </div>
 
       <div class="grid-3-col mt-3">
@@ -205,6 +228,44 @@ export function renderStage3(container) {
           <span class="badge ${calc.badgeClass} text-xs">Pace Indicator</span>
         </div>
       </div>
+
+      ${activePricingTiers ? `
+        <div class="pricing-tiers-panel mt-3 p-3 bg-white-soft rounded border-warm">
+          <div class="flex-between mb-2">
+            <h4 class="text-espresso text-xs font-bold m-0">💡 Suggested 3-Tier Packaging & Pricing:</h4>
+            <span class="text-xs text-muted">Click any price below to load into the calculator</span>
+          </div>
+          <div class="grid-3-col gap-2">
+            ${activePricingTiers.map(tier => `
+              <div class="p-3 bg-sand-light rounded border-warm flex flex-col justify-between">
+                <div>
+                  <div class="flex-between mb-1">
+                    <strong class="text-espresso text-xs">${escapeHtml(tier.name)}</strong>
+                    <span class="badge badge-accent text-xs">$${tier.price}</span>
+                  </div>
+                  <div class="text-xs text-muted mb-2 font-italic">${escapeHtml(tier.billing || "one-time")}</div>
+                  <p class="text-xs text-charcoal mb-2">${escapeHtml(tier.deliverables || "")}</p>
+                  <div class="text-xs text-muted mb-2">
+                    <strong>For:</strong> ${escapeHtml(tier.targetBuyer || "")}
+                  </div>
+                </div>
+                <div class="mt-2 pt-2 border-top-warm flex-between">
+                  <span class="badge badge-neutral text-xs">${escapeHtml(tier.mathHint || "")}</span>
+                  <button class="btn btn-primary text-xs btn-apply-single-tier" data-price="${tier.price}">
+                    Use $${tier.price} →
+                  </button>
+                </div>
+              </div>
+            `).join("")}
+          </div>
+          <div class="mt-3 flex-between flex-wrap gap-2">
+            <span class="text-xs text-muted">Offer all three? You can copy this complete packaging bundle into your Revenue Streams box.</span>
+            <button id="btn-apply-all-tiers-to-revenue" class="btn btn-secondary text-xs">
+              📋 Copy All 3 Packages to Revenue Box
+            </button>
+          </div>
+        </div>
+      ` : ""}
     </div>
 
     <!-- Gate Status & Controls -->
@@ -383,6 +444,101 @@ Respond strictly with valid JSON only in this exact format:
       renderStage3(container);
       window.dispatchEvent(new CustomEvent("app:state-updated"));
       alert("Napkin math numbers copied into your Revenue Streams box!");
+    }
+  });
+
+  // AI Pricing Tiers Handlers
+  container.querySelector("#btn-clear-pricing-tiers")?.addEventListener("click", () => {
+    activePricingTiers = null;
+    renderStage3(container);
+  });
+
+  container.querySelector("#btn-ai-pricing-tiers")?.addEventListener("click", async () => {
+    const currentPrice = Number(priceUnitInput.value) || 50;
+    const currentTarget = Number(targetIncomeInput.value) || 1000;
+
+    if (!store.isAiConfigured()) {
+      const wantsAi = confirm(
+        "✨ AI Co-Pilot is not configured yet.\n\nWould you like to connect an AI provider (OpenAI, Gemini, Claude, Grok, or local Ollama) for custom package suggestions?\n\n(Click Cancel to see our grounded standard 3-tier starter packages immediately)."
+      );
+      if (wantsAi) {
+        window.dispatchEvent(new CustomEvent("app:open-ai-settings"));
+        return;
+      }
+      // Offline graceful tiered package defaults
+      activePricingTiers = [
+        {
+          name: "Tier 1: Starter / Audit",
+          price: Math.max(15, Math.round(currentPrice * 0.5)),
+          billing: "one-time",
+          deliverables: "Quick diagnosis, action checklist, or sample trial",
+          targetBuyer: "Hesitant first-time customers testing your reliability",
+          mathHint: `${Math.ceil(currentTarget / Math.max(15, Math.round(currentPrice * 0.5)))} clients/mo`
+        },
+        {
+          name: "Tier 2: Core Sweet Spot",
+          price: currentPrice,
+          billing: "per month / project",
+          deliverables: "Complete problem solved with ongoing standard support",
+          targetBuyer: "Your ideal recurring regular customers",
+          mathHint: `${Math.ceil(currentTarget / currentPrice)} clients/mo`
+        },
+        {
+          name: "Tier 3: White Glove VIP",
+          price: Math.round(currentPrice * 2.5),
+          billing: "per month",
+          deliverables: "100% done-for-you priority service and zero hassle",
+          targetBuyer: "Time-poor professionals who value convenience",
+          mathHint: `Just ${Math.ceil(currentTarget / (currentPrice * 2.5))} clients/mo`
+        }
+      ];
+      renderStage3(container);
+      return;
+    }
+
+    isSuggestingTiers = true;
+    renderStage3(container);
+
+    try {
+      const s1 = store.state.stage1 || {};
+      const res = await suggestPricingTiers({
+        ideaName: store.state.name,
+        problem: s1.problemHypothesis || s1.painStory || "Everyday headache",
+        targetPrice: currentPrice,
+        monthlyGoal: currentTarget
+      });
+      activePricingTiers = res;
+    } catch (err) {
+      alert("Could not generate pricing tiers: " + (err.message || String(err)));
+    } finally {
+      isSuggestingTiers = false;
+      renderStage3(container);
+    }
+  });
+
+  container.querySelectorAll(".btn-apply-single-tier").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      const p = Number(e.currentTarget.getAttribute("data-price"));
+      if (priceUnitInput && p) {
+        priceUnitInput.value = p;
+        handleNapkinChange();
+      }
+    });
+  });
+
+  container.querySelector("#btn-apply-all-tiers-to-revenue")?.addEventListener("click", () => {
+    if (!activePricingTiers) return;
+    const revEl = container.querySelector("#canvas-revenue");
+    if (revEl) {
+      const tierText = activePricingTiers
+        .map(t => `• ${t.name}: $${t.price} (${t.billing}) — ${t.deliverables}`)
+        .join("\n");
+      revEl.value = tierText;
+      saveCanvasData(container);
+      store.saveState();
+      renderStage3(container);
+      window.dispatchEvent(new CustomEvent("app:state-updated"));
+      alert("All 3 packaging tiers copied into your Revenue Streams box!");
     }
   });
 }

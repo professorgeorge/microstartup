@@ -5,9 +5,23 @@ import { alchemistScenarios } from "../data/alchemistData.js";
 import { INNOVATOR_STORIES } from "../data/innovatorStories.js";
 import { store } from "../store.js";
 import { renderDossierView } from "./exportDossier.js";
+import { coachCustomSetback } from "../services/aiClient.js";
 
 let activeStoryCategory = "all";
 let activeHelpSubTab = "guide"; // "guide" | "encourager" | "faq"
+let customSetbackResult = null;
+let isCoachingSetback = false;
+let lastSetbackInputText = "";
+
+function escapeHtml(str) {
+  if (!str) return "";
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
 
 export function renderHelpTab(container) {
   let activeScenarioId = store.state.activeAlchemistScenarioId || alchemistScenarios[0].id;
@@ -92,6 +106,69 @@ export function renderHelpTab(container) {
         copyBtn.textContent = "✓ Copied Script!";
         setTimeout(() => { copyBtn.textContent = "📋 Copy Script"; }, 2000);
       });
+    });
+
+    // Custom Setback AI Coach Handlers
+    const setbackInput = container.querySelector("#input-custom-setback");
+    const askSetbackBtn = container.querySelector("#btn-ask-custom-setback");
+    const clearSetbackBtn = container.querySelector("#btn-clear-custom-setback");
+    const copyCustomScriptBtn = container.querySelector("#btn-copy-custom-setback-script");
+
+    clearSetbackBtn?.addEventListener("click", () => {
+      customSetbackResult = null;
+      renderHelpTab(container);
+    });
+
+    copyCustomScriptBtn?.addEventListener("click", () => {
+      if (customSetbackResult?.script) {
+        navigator.clipboard.writeText(customSetbackResult.script).then(() => {
+          copyCustomScriptBtn.textContent = "✓ Copied!";
+          setTimeout(() => { copyCustomScriptBtn.textContent = "📋 Copy Script"; }, 2000);
+        });
+      }
+    });
+
+    askSetbackBtn?.addEventListener("click", async () => {
+      const situation = setbackInput ? setbackInput.value.trim() : lastSetbackInputText;
+      if (!situation) {
+        alert("Please type what happened or what the person said first.");
+        return;
+      }
+      lastSetbackInputText = situation;
+
+      if (!store.isAiConfigured()) {
+        const wantsAi = confirm(
+          "✨ AI Co-Pilot is not configured yet.\n\nWould you like to connect an AI provider (OpenAI, Gemini, Claude, Grok, or local Ollama) for a tailored diagnosis?\n\n(Click Cancel to see our grounded standard Encourager advice immediately)."
+        );
+        if (wantsAi) {
+          window.dispatchEvent(new CustomEvent("app:open-ai-settings"));
+          return;
+        }
+        // Offline graceful diagnosis
+        customSetbackResult = {
+          diagnosis: "When someone says 'no' or acts uninterested, it usually means they don't experience this headache frequently enough, or they felt they were being pitched a product.",
+          reframe: "This is a great outcome! Learning this in 5 minutes costs $0 and prevents you from building something that won't sell.",
+          script: "Thanks so much for being honest! Quick question: how do you currently handle this in your daily routine right now?"
+        };
+        renderHelpTab(container);
+        return;
+      }
+
+      isCoachingSetback = true;
+      renderHelpTab(container);
+
+      try {
+        const res = await coachCustomSetback({
+          situation,
+          projectContext: `${store.state.name} (${store.state.stage1?.problemHypothesis || ""})`
+        });
+        customSetbackResult = res;
+      } catch (err) {
+        alert("Could not analyze situation: " + (err.message || String(err)));
+      } finally {
+        isCoachingSetback = false;
+        renderHelpTab(container);
+      }
     });
   }
 }
@@ -353,6 +430,50 @@ function renderEncouragerView(activeScenarioId, currentScenario) {
             Select any situation below to get an honest diagnosis and an exact script to say or send.
           </p>
         </div>
+      </div>
+
+      <!-- Interactive Custom Setback Coach (AI Powered) -->
+      <div class="card p-3 my-3 bg-white-soft border-warm">
+        <div class="flex-between mb-1">
+          <div class="flex items-center gap-2">
+            <span style="font-size: 1.2rem;" aria-hidden="true">✨</span>
+            <strong class="text-espresso text-xs">Facing a Specific Awkward Moment or Rejection?</strong>
+          </div>
+          <span class="badge badge-accent text-xs">Custom Setback Coach</span>
+        </div>
+        <p class="text-xs text-muted mb-2">
+          Did someone ghost you, laugh at your price, or say something confusing? Type what happened below to get an honest diagnosis and an exact reply script.
+        </p>
+        <div class="flex gap-2">
+          <input type="text" id="input-custom-setback" class="w-100 text-xs p-2 rounded border-warm" placeholder="e.g. A local business owner told me they already do this themselves on paper..." value="${escapeHtml(lastSetbackInputText)}">
+          <button id="btn-ask-custom-setback" class="btn btn-primary text-xs" style="white-space: nowrap;">
+            ${isCoachingSetback ? "⏳ Diagnosing..." : "✨ Coach Me"}
+          </button>
+        </div>
+
+        ${customSetbackResult ? `
+          <div class="custom-setback-result mt-3 p-3 bg-sand-light rounded border-warm">
+            <div class="flex-between mb-2">
+              <strong class="text-terracotta text-xs">🌱 Encourager Diagnosis & Exact Reply:</strong>
+              <button id="btn-clear-custom-setback" class="btn-link text-xs">✕ Close</button>
+            </div>
+            <div class="diagnosis-card mb-2 p-2 rounded bg-white-soft border-warm">
+              <strong class="text-espresso text-xs">What this actually means:</strong>
+              <p class="text-xs text-charcoal mb-0 mt-1">${escapeHtml(customSetbackResult.diagnosis)}</p>
+            </div>
+            <div class="reframe-card mb-2 p-2 rounded bg-highlight border-warm">
+              <strong class="text-terracotta text-xs">Why this is actually good news:</strong>
+              <p class="text-xs text-charcoal mb-0 mt-1">${escapeHtml(customSetbackResult.reframe)}</p>
+            </div>
+            <div class="script-card p-2 rounded bg-white-soft border-warm">
+              <div class="flex-between mb-1">
+                <strong class="text-espresso text-xs">An exact reply to text or say:</strong>
+                <button id="btn-copy-custom-setback-script" class="btn-link text-xs">📋 Copy Script</button>
+              </div>
+              <p class="text-xs font-italic text-charcoal mb-0 p-2 bg-oat rounded">"${escapeHtml(customSetbackResult.script)}"</p>
+            </div>
+          </div>
+        ` : ""}
       </div>
 
       <div class="alchemist-modal-layout mt-3">

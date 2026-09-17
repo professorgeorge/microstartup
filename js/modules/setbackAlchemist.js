@@ -78,9 +78,16 @@ function showScenarioDetail(scenarioId, listEl, detailEl) {
       </p>
     </div>
 
-    <div class="pivot-card p-3 rounded bg-accent-soft">
+    <div class="pivot-card mb-3 p-3 rounded bg-accent-soft">
       <strong class="text-espresso">Where to look next:</strong>
       <p class="text-sm mt-1 mb-0">${scenario.pivotDirection}</p>
+    </div>
+
+    <div class="p-3 bg-sand-light rounded border-warm flex-between flex-wrap gap-2">
+      <span class="text-xs text-muted">Encountered an awkward situation not listed here?</span>
+      <button id="btn-alchemist-custom-coach" class="btn btn-secondary text-xs">
+        ✨ Ask Custom AI Coach →
+      </button>
     </div>
   `;
 
@@ -91,5 +98,10 @@ function showScenarioDetail(scenarioId, listEl, detailEl) {
       copyBtn.textContent = "✓ Copied!";
       setTimeout(() => { copyBtn.textContent = "📋 Copy Script"; }, 2000);
     });
+  });
+
+  detailEl.querySelector("#btn-alchemist-custom-coach")?.addEventListener("click", () => {
+    document.getElementById("alchemist-modal")?.classList.remove("modal-open");
+    window.dispatchEvent(new CustomEvent("app:navigate-tab", { detail: { tab: "help" } }));
   });
 }

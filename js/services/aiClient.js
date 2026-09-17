@@ -427,3 +427,197 @@ export async function testAiConnection(config) {
   }
 }
 
+// =========================================================================
+// Specialized Domain AI Helpers (With Fallback Grace & Structured JSON Mode)
+// =========================================================================
+
+/**
+ * 1. Custom Setback Coach (Encourager & Reframe)
+ */
+export async function coachCustomSetback({ situation, projectContext = "" }) {
+  const systemPrompt = `You are The Encourager & Setback Alchemist for first-time, micro-scale solo founders. 
+You follow Rob Fitzpatrick's 'The Mom Test' and lean validation principles.
+Your tone is warm, grounded, zero-bullshit, and highly empathetic.
+Respond with valid JSON with keys:
+- "diagnosis": (2 sentences explaining what the other person's reaction or awkward moment actually means about their habits, status, or pain, rather than personal rejection)
+- "reframe": (2 sentences explaining why this setback is good news, saving money/time or clarifying who the real buyer is)
+- "script": (An exact, non-defensive 1-2 sentence response to text or say back)
+Do not output markdown code blocks.`;
+
+  const prompt = `Here is the awkward situation or rejection the founder experienced:
+"${situation}"
+
+Project Context (if any):
+${projectContext || "Solo micro-startup idea"}
+
+Provide the diagnosis, reframe, and exact reply script.`;
+
+  const raw = await callAi({ prompt, systemPrompt, jsonMode: true, temperature: 0.6 });
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return {
+      diagnosis: "Reactions like this usually mean the person felt cornered or didn't understand the specific problem being solved, not that your concept has no merit.",
+      reframe: "Finding skepticism or disinterest early costs zero dollars and prevents you from spending months building the wrong thing.",
+      script: "Thanks so much for the candid thought! Quick question: how do you currently handle this headache in your own day-to-day?"
+    };
+  }
+}
+
+/**
+ * 2. Audience-Tailored Outreach Script Generator
+ */
+export async function generateCustomOutreach({ audience, problem, ideaName }) {
+  const systemPrompt = `You are an expert in customer discovery who strictly adheres to 'The Mom Test'.
+Rules:
+1. Never mention the idea or product name.
+2. Never ask for money, approval, or opinions about the future.
+3. Only ask about past behavior, current workflow, and recent headaches.
+4. Keep messages conversational, polite, and under 3 sentences.
+Respond with valid JSON with keys:
+- "whatsapp": (Casual 2-3 sentence WhatsApp / SMS message asking for 10 min of advice on their experience)
+- "inPerson": (A natural 1-2 sentence opener to say in person or over coffee)
+- "email": (A warm, brief 3-sentence email with subject line format: "Subject: [Topic] / Quick question")
+Do not output markdown code blocks.`;
+
+  const prompt = `Idea/Topic: ${ideaName || "A helpful service"}
+Target Audience: ${audience || "Everyday people or local small business owners"}
+Core Headache/Problem: ${problem || "Wasting time on repetitive chores"}
+
+Generate 3 tailored outreach scripts for this specific audience.`;
+
+  const raw = await callAi({ prompt, systemPrompt, jsonMode: true, temperature: 0.7 });
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return {
+      whatsapp: `Hey! I'm doing some quick research on how folks manage ${problem || "this headache"} these days. Would you be up for a 7-minute phone chat this week? Promise I'm not selling anything, just trying to understand the workflow!`,
+      inPerson: `Hey, quick question — I've been noticing a lot of people struggling with ${problem || "this issue"} recently. How do you normally handle that in your own day?`,
+      email: `Subject: Quick question about ${problem ? problem.slice(0, 30) : "workflow"}\n\nHi there! I'm researching how local people navigate ${problem || "this issue"}. Do you have 8 minutes for a quick chat sometime this week? Strictly learning how you do things, no sales pitch whatsoever.`
+    };
+  }
+}
+
+/**
+ * 3. Pricing Tier & Packaging Strategist
+ */
+export async function suggestPricingTiers({ ideaName, problem, targetPrice = 50, monthlyGoal = 1000 }) {
+  const systemPrompt = `You are a micro-business packaging and pricing strategist for solo entrepreneurs.
+Design 3 sensible packaging tiers to prevent the founder from undercharging or trading time for pennies.
+Respond with valid JSON array of 3 objects, each with:
+- "name": (Short name e.g. 'Quick Fix / Starter', 'Standard Monthly / Core', 'White-Glove / VIP')
+- "price": (Recommended dollar amount as a number e.g. 39)
+- "billing": (e.g. 'one-time', 'per month', 'per project')
+- "deliverables": (Concise 2-bullet summary of what the customer actually receives)
+- "targetBuyer": (Who buys this tier and why)
+- "mathHint": (Short note: how many of this tier per month replaces their $${monthlyGoal} goal)
+Do not output markdown code blocks.`;
+
+  const prompt = `Project: ${ideaName || "Micro Service"}
+Problem: ${problem || "Everyday headache"}
+Current Baseline Price Idea: $${targetPrice}
+Founder's Monthly Income Goal: $${monthlyGoal}
+
+Suggest 3 smart, practical packaging tiers.`;
+
+  const raw = await callAi({ prompt, systemPrompt, jsonMode: true, temperature: 0.6 });
+  try {
+    return JSON.parse(raw);
+  } catch {
+    const p = Number(targetPrice) || 50;
+    return [
+      {
+        name: "Starter / Audit",
+        price: Math.round(p * 0.5),
+        billing: "one-time",
+        deliverables: "Quick 30-minute diagnosis + action checklist",
+        targetBuyer: "Hesitant first-time customers who want a low-risk taste",
+        mathHint: `${Math.ceil(monthlyGoal / (p * 0.5))} clients/mo to hit goal`
+      },
+      {
+        name: "Standard Core Solution",
+        price: p,
+        billing: "per month",
+        deliverables: "Full problem solved + ongoing monthly support",
+        targetBuyer: "Your ideal regular customers (the sweet spot)",
+        mathHint: `${Math.ceil(monthlyGoal / p)} clients/mo to hit goal`
+      },
+      {
+        name: "Done-For-You VIP",
+        price: Math.round(p * 2.5),
+        billing: "per month",
+        deliverables: "100% white-glove setup + zero effort on customer's part",
+        targetBuyer: "Busy professionals who value time over money",
+        mathHint: `Just ${Math.ceil(monthlyGoal / (p * 2.5))} clients/mo to hit goal`
+      }
+    ];
+  }
+}
+
+/**
+ * 4. Local Community Noticeboard Flyer Polish
+ */
+export async function polishFlyerHooks({ ideaName, problem, solution, audience }) {
+  const systemPrompt = `You write high-converting, warm, friendly flyers for neighborhood bulletin boards, community library noticeboards, local coffee shop corkboards, and Nextdoor / Facebook groups.
+Avoid Silicon Valley jargon. Write like a helpful, trustworthy neighbor.
+Respond with valid JSON with keys:
+- "headline": (Catchy, human headline e.g. "Tired of spending weekends fixing your lawn?")
+- "subheadline": (1 sentence clear explanation of the neighborhood service)
+- "bullets": (Array of 3 punchy benefit bullet points starting with a checkmark or emoji)
+- "callToAction": (Low-pressure, high-curiosity invitation e.g. "Text or call neighbor [Name] at [Phone] for a free 10-minute estimate")
+Do not output markdown code blocks.`;
+
+  const prompt = `Idea Name: ${ideaName || "Local Problem Solver"}
+Target Audience: ${audience || "Local residents"}
+Problem Faced: ${problem || "A common daily annoyance"}
+Proposed Solution: ${solution || "A fast, friendly local service"}
+
+Generate friendly, community-oriented flyer copy.`;
+
+  const raw = await callAi({ prompt, systemPrompt, jsonMode: true, temperature: 0.7 });
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return {
+      headline: `Tired of dealing with ${problem ? problem.slice(0, 35) : "this everyday headache"}?`,
+      subheadline: `A friendly, local neighbor offering dependable help so you get your free time back.`,
+      bullets: [
+        "✓ Zero complicated contracts or hidden fees",
+        "✓ Reliable, personal service right here in the neighborhood",
+        "✓ 100% satisfaction guaranteed before you pay a dime"
+      ],
+      callToAction: "Text or call for a free 5-minute chat to see if we can help!"
+    };
+  }
+}
+
+/**
+ * 5. Micro-Action Simplifier ("Make it even simpler")
+ */
+export async function simplifyMission({ missionTitle, missionDesc, projectContext = "" }) {
+  const systemPrompt = `You are a compassionate anti-procrastination coach for anxious solo entrepreneurs.
+Your job is to reduce any business task to a ridiculously small 3-to-5 minute baby step that requires ZERO courage, ZERO money, and CANNOT BE FAILED.
+Respond with valid JSON with keys:
+- "babyStepTitle": (A comforting 4-8 word title e.g. "Just write down 2 names on paper")
+- "babyStepAction": (Exactly 2 sentences: step 1 and step 2 of what to physically do right now without leaving their desk)
+- "whyItWorks": (1 sentence explaining why this micro-win breaks inertia)
+Do not output markdown code blocks.`;
+
+  const prompt = `Current Mission: ${missionTitle}
+Description: ${missionDesc}
+Project: ${projectContext || "Micro startup"}
+
+Make this mission ridiculously simple so the founder can finish in 4 minutes today.`;
+
+  const raw = await callAi({ prompt, systemPrompt, jsonMode: true, temperature: 0.6 });
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return {
+      babyStepTitle: "Just jot down 2 names on paper",
+      babyStepAction: "Don't contact anyone yet. Grab an index card or open your notes app and write down 2 people you know who might experience this problem. Once written, your mission for today is 100% done!",
+      whyItWorks: "Action creates clarity before motivation arrives; finishing one tiny step unlocks immediate momentum."
+    };
+  }
+}
+

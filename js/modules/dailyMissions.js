@@ -2,8 +2,10 @@
 // Breaks down the startup journey into non-intimidating, bite-sized daily actions.
 
 import { store, DEFAULT_MISSIONS } from "../store.js";
+import { simplifyMission } from "../services/aiClient.js";
 
 let isMissionsExpanded = false;
+let activeBabyStep = null; // { missionId, data, loading }
 
 export function renderDailyMissions(container) {
   if (!container) return;
@@ -47,9 +49,24 @@ export function renderDailyMissions(container) {
           </div>
           <h4 class="m-0 text-espresso text-sm">${nextMission.title}</h4>
           <p class="text-xs text-charcoal mt-1 mb-2">${nextMission.desc}</p>
-          <div class="flex-between">
+          
+          ${activeBabyStep && activeBabyStep.missionId === nextMission.id ? `
+            <div class="baby-step-card p-3 my-2 bg-sand-light rounded border-warm">
+              <div class="flex-between mb-1">
+                <strong class="text-terracotta text-xs">🌱 5-Minute Baby Step: ${activeBabyStep.data?.babyStepTitle || ""}</strong>
+                <span class="badge badge-accent text-xs">Zero Pressure</span>
+              </div>
+              <p class="text-xs text-charcoal mb-1">${activeBabyStep.data?.babyStepAction || ""}</p>
+              <div class="text-xs text-muted"><em>💡 Why it works: ${activeBabyStep.data?.whyItWorks || ""}</em></div>
+            </div>
+          ` : ""}
+
+          <div class="flex-between flex-wrap gap-2 pt-1">
             <span class="badge badge-sand text-xs">Step ${nextMission.stage}</span>
-            <div class="flex-row items-center gap-2">
+            <div class="flex-row items-center flex-wrap gap-2">
+              <button class="btn btn-secondary text-xs btn-simplify-mission" data-id="${nextMission.id}" title="Too tired or anxious today? Reduce this to an effortless 4-minute baby step">
+                ✨ ${activeBabyStep && activeBabyStep.missionId === nextMission.id && activeBabyStep.loading ? "Simplifying..." : "5-Min Baby Step"}
+              </button>
               ${nextMission.stage === 2 ? `
                 <button class="btn btn-secondary text-xs btn-open-sim-mission" title="Practice conversation in simulator">
                   🎮 Simulator
@@ -160,6 +177,62 @@ function attachMissionsEvents(container) {
     btn.addEventListener("click", () => {
       close();
       window.dispatchEvent(new CustomEvent("app:open-simulator"));
+    });
+  });
+
+  container.querySelectorAll(".btn-simplify-mission").forEach(btn => {
+    btn.addEventListener("click", async (e) => {
+      const id = e.currentTarget.getAttribute("data-id");
+      const mission = DEFAULT_MISSIONS.find(m => m.id === id);
+      if (!mission) return;
+
+      if (!store.isAiConfigured()) {
+        const wantsConfig = confirm(
+          "AI Co-Pilot is not configured yet.\n\nWould you like to connect an AI provider (OpenAI, Gemini, Claude, Grok, or local Ollama) for tailored baby steps?\n\n(Click Cancel to see our grounded offline 5-minute baby step immediately)."
+        );
+        if (wantsConfig) {
+          close();
+          window.dispatchEvent(new CustomEvent("app:open-ai-settings"));
+          return;
+        }
+        // Graceful offline fallback
+        activeBabyStep = {
+          missionId: id,
+          loading: false,
+          data: {
+            babyStepTitle: `Quick 3-Minute Start on Step ${mission.stage}`,
+            babyStepAction: `Don't worry about completing the whole thing today. Open a blank index card or notepad and write down just ONE specific note or question related to this mission. That counts as your victory for today!`,
+            whyItWorks: "Micro-commitments eliminate friction and defeat procrastination every single time."
+          }
+        };
+        renderDailyMissions(container);
+        return;
+      }
+
+      // AI Configured
+      activeBabyStep = {
+        missionId: id,
+        loading: true,
+        data: null
+      };
+      renderDailyMissions(container);
+
+      try {
+        const result = await simplifyMission({
+          missionTitle: mission.title,
+          missionDesc: mission.desc,
+          projectContext: `${store.state.name} (${store.state.problemDescription || ""})`
+        });
+        activeBabyStep = {
+          missionId: id,
+          loading: false,
+          data: result
+        };
+      } catch (err) {
+        alert("Could not generate baby step: " + err.message);
+        activeBabyStep = null;
+      }
+      renderDailyMissions(container);
     });
   });
 

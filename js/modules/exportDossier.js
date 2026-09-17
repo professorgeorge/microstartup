@@ -2,8 +2,11 @@
 // Built for everyday innovators to share with advisors, grants, or post on neighborhood bulletin boards.
 
 import { store } from "../store.js";
+import { polishFlyerHooks } from "../services/aiClient.js";
 
 let activeDossierView = "summary"; // 'summary' or 'flyer'
+let customFlyerHooks = null;
+let isPolishingFlyer = false;
 
 export function initExportDossier() {
   const modal = document.getElementById("dossier-modal");
@@ -54,7 +57,25 @@ export function renderDossierView(container) {
     </div>
 
     <div id="dossier-inner-content">
-      ${activeDossierView === "summary" ? renderSummaryHTML() : renderFlyerHTML()}
+      ${activeDossierView === "summary" ? renderSummaryHTML() : `
+        <div class="flex-between flex-wrap gap-2 mb-3 p-3 bg-oat rounded border-warm">
+          <div>
+            <strong class="text-espresso text-xs">Community Notice & Noticeboard Flyer:</strong>
+            <span class="text-xs text-muted d-block">Ready to print or post on local Facebook/Nextdoor corkboards</span>
+          </div>
+          <div class="flex-row items-center gap-2">
+            ${customFlyerHooks ? `
+              <button id="btn-reset-flyer-hooks" class="btn btn-secondary text-xs" title="Restore default flyer copy">
+                ↺ Reset Copy
+              </button>
+            ` : ""}
+            <button id="btn-ai-polish-flyer" class="btn btn-secondary text-xs" title="Rewrite into warm, neighborly copy with high curiosity headlines for bulletin boards">
+              ${isPolishingFlyer ? "⏳ Polishing Flyer Copy..." : "✨ Polish Flyer for Noticeboards"}
+            </button>
+          </div>
+        </div>
+        ${renderFlyerHTML()}
+      `}
     </div>
   `;
 
@@ -67,6 +88,58 @@ export function renderDossierView(container) {
   container.querySelector("#tab-view-flyer")?.addEventListener("click", () => {
     activeDossierView = "flyer";
     renderDossierView(container);
+  });
+
+  // Attach Flyer Polish Events
+  container.querySelector("#btn-reset-flyer-hooks")?.addEventListener("click", () => {
+    customFlyerHooks = null;
+    renderDossierView(container);
+  });
+
+  container.querySelector("#btn-ai-polish-flyer")?.addEventListener("click", async () => {
+    const s = store.state;
+    const s1 = s.stage1;
+
+    if (!store.isAiConfigured()) {
+      const wantsAi = confirm(
+        "✨ AI Co-Pilot is not configured yet.\n\nWould you like to connect an AI provider (OpenAI, Gemini, Claude, Grok, or local Ollama) to polish your flyer copy?\n\n(Click Cancel to see our grounded standard neighborhood copy immediately)."
+      );
+      if (wantsAi) {
+        window.dispatchEvent(new CustomEvent("app:open-ai-settings"));
+        return;
+      }
+      // Offline fallback
+      customFlyerHooks = {
+        headline: `Tired of dealing with ${s1.currentWorkaround || "this headache"}?`,
+        subheadline: `A neighbor right here in the community offering reliable, simple help to fix this for good.`,
+        bullets: [
+          "✓ Direct, friendly assistance from a real neighbor",
+          "✓ Zero hassle, zero long contracts, and honest pricing",
+          "✓ 5 free pilot test slots open this week for early feedback"
+        ],
+        callToAction: "Text or call neighbor [Your Name] for a free 5-minute chat!"
+      };
+      renderDossierView(container);
+      return;
+    }
+
+    isPolishingFlyer = true;
+    renderDossierView(container);
+
+    try {
+      const res = await polishFlyerHooks({
+        ideaName: s.name,
+        problem: s1.problemHypothesis || s1.painStory || "everyday headache",
+        solution: s1.elevatorPremise || s.stage3.canvas?.uniqueValueProposition || "friendly service",
+        audience: s1.targetAudience || "local residents"
+      });
+      customFlyerHooks = res;
+    } catch (err) {
+      alert("Could not polish flyer copy: " + (err.message || String(err)));
+    } finally {
+      isPolishingFlyer = false;
+      renderDossierView(container);
+    }
   });
 }
 
@@ -220,22 +293,35 @@ function renderFlyerHTML() {
   const workaround = s.stage1.currentWorkaround || "dealing with this headache manually";
   const premise = s.stage1.elevatorPremise || s.stage3.canvas.uniqueValueProposition || "A friendly, simple way to make life easier.";
 
+  const headline = customFlyerHooks?.headline || `Attention ${audience}!`;
+  const subheadline = customFlyerHooks?.subheadline || `Are you tired of having to ${workaround}?`;
+  const bullets = customFlyerHooks?.bullets || null;
+  const cta = customFlyerHooks?.callToAction || "We are looking for 5 people to try our first batch for free!";
+
   return `
     <div class="flyer-container p-4 bg-white border-warm rounded text-center">
       <div class="flyer-tag mb-2 text-terracotta font-bold text-xs">
         📢 LOCAL COMMUNITY NOTICE & CALL FOR TESTERS
       </div>
       <h2 class="flyer-headline text-espresso mb-3">
-        Attention ${escapeHtml(audience)}!
+        ${escapeHtml(headline)}
       </h2>
-      <div class="flyer-question p-3 bg-oat rounded text-sm mb-3">
-        Are you tired of having to <strong>${escapeHtml(workaround)}</strong>?
+      <div class="flyer-question p-3 bg-oat rounded text-sm mb-3 font-bold">
+        ${escapeHtml(subheadline)}
       </div>
-      <p class="flyer-body text-sm text-charcoal mb-4 max-w-600 mx-auto">
-        ${escapeHtml(premise)}
-      </p>
+
+      ${bullets && bullets.length ? `
+        <div class="flyer-bullets text-left max-w-500 mx-auto my-3 p-3 bg-sand-light rounded border-warm text-xs text-charcoal">
+          ${bullets.map(b => `<div class="mb-1">${escapeHtml(b)}</div>`).join("")}
+        </div>
+      ` : `
+        <p class="flyer-body text-sm text-charcoal mb-4 max-w-600 mx-auto">
+          ${escapeHtml(premise)}
+        </p>
+      `}
+
       <div class="flyer-callout p-3 bg-highlight border-warm rounded mb-4 max-w-600 mx-auto">
-        <strong class="text-terracotta">We are looking for 5 people to try our first batch for free!</strong>
+        <strong class="text-terracotta">${escapeHtml(cta)}</strong>
         <p class="text-xs text-muted mt-1 mb-0">
           In exchange, all we ask is 10 minutes of your honest feedback. No sales pitch, no pushy calls.
         </p>
@@ -253,6 +339,21 @@ function generateFlyerText() {
   const audience = s.stage1.targetAudience || "Local Neighbors";
   const workaround = s.stage1.currentWorkaround || "dealing with this manually";
   const premise = s.stage1.elevatorPremise || s.stage3.canvas.uniqueValueProposition || "A simple way to fix this.";
+
+  if (customFlyerHooks) {
+    return `${customFlyerHooks.headline.toUpperCase()}
+
+${customFlyerHooks.subheadline}
+
+${(customFlyerHooks.bullets || []).join("\n")}
+
+${customFlyerHooks.callToAction}
+In exchange, all we ask for is 10 minutes of your honest feedback.
+
+Interested? Reply to this notice or text me at [Your Phone/Email]!
+Project: ${s.name || "Local Pilot"}
+`;
+  }
 
   return `ATTENTION ${audience.toUpperCase()}!
 
