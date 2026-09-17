@@ -2,6 +2,8 @@
 // Supports: Google Gemini, OpenAI, Anthropic Claude, xAI Grok, Ollama (local), and Custom OpenAI-compatible endpoints.
 // Local client-side execution: credentials are sent directly to the user's chosen provider endpoint.
 
+import { store } from "../store.js";
+
 export const AI_PROVIDERS = {
   gemini: {
     id: "gemini",
@@ -90,13 +92,14 @@ Rules:
 4. When asked for JSON, output ONLY valid JSON with no markdown wrapping or preamble.`;
 
 export async function callAi({ prompt, systemPrompt = "", temperature = 0.7, jsonMode = false, config }) {
-  if (!config || !config.provider) {
+  const activeConfig = config || (typeof store !== "undefined" && store?.getAiConfig ? store.getAiConfig() : null);
+  if (!activeConfig || !activeConfig.provider) {
     throw new Error("AI is not configured. Please open AI Settings to set up an API provider.");
   }
 
-  const provider = config.provider;
-  const key = (config.apiKey || "").trim();
-  const model = (config.model || AI_PROVIDERS[provider]?.defaultModel || "").trim();
+  const provider = activeConfig.provider;
+  const key = (activeConfig.apiKey || "").trim();
+  const model = (activeConfig.model || AI_PROVIDERS[provider]?.defaultModel || "").trim();
   const fullSystemPrompt = `${SYSTEM_FOUNDER_GUARDRAIL}\n\n${systemPrompt}`.trim();
 
   switch (provider) {
@@ -434,7 +437,8 @@ export async function testAiConnection(config) {
 /**
  * 1. Custom Setback Coach (Encourager & Reframe)
  */
-export async function coachCustomSetback({ situation, projectContext = "" }) {
+export async function coachCustomSetback({ situation, projectContext = "", config }) {
+  const activeConfig = config || (typeof store !== "undefined" && store?.getAiConfig ? store.getAiConfig() : null);
   const systemPrompt = `You are The Encourager & Setback Alchemist for first-time, micro-scale solo founders. 
 You follow Rob Fitzpatrick's 'The Mom Test' and lean validation principles.
 Your tone is warm, grounded, zero-bullshit, and highly empathetic.
@@ -452,7 +456,7 @@ ${projectContext || "Solo micro-startup idea"}
 
 Provide the diagnosis, reframe, and exact reply script.`;
 
-  const raw = await callAi({ prompt, systemPrompt, jsonMode: true, temperature: 0.6 });
+  const raw = await callAi({ prompt, systemPrompt, jsonMode: true, temperature: 0.6, config: activeConfig });
   try {
     return JSON.parse(raw);
   } catch {
@@ -467,7 +471,8 @@ Provide the diagnosis, reframe, and exact reply script.`;
 /**
  * 2. Audience-Tailored Outreach Script Generator
  */
-export async function generateCustomOutreach({ audience, problem, ideaName }) {
+export async function generateCustomOutreach({ audience, problem, ideaName, config }) {
+  const activeConfig = config || (typeof store !== "undefined" && store?.getAiConfig ? store.getAiConfig() : null);
   const systemPrompt = `You are an expert in customer discovery who strictly adheres to 'The Mom Test'.
 Rules:
 1. Never mention the idea or product name.
@@ -486,7 +491,7 @@ Core Headache/Problem: ${problem || "Wasting time on repetitive chores"}
 
 Generate 3 tailored outreach scripts for this specific audience.`;
 
-  const raw = await callAi({ prompt, systemPrompt, jsonMode: true, temperature: 0.7 });
+  const raw = await callAi({ prompt, systemPrompt, jsonMode: true, temperature: 0.7, config: activeConfig });
   try {
     return JSON.parse(raw);
   } catch {
@@ -501,7 +506,8 @@ Generate 3 tailored outreach scripts for this specific audience.`;
 /**
  * 3. Pricing Tier & Packaging Strategist
  */
-export async function suggestPricingTiers({ ideaName, problem, targetPrice = 50, monthlyGoal = 1000 }) {
+export async function suggestPricingTiers({ ideaName, problem, targetPrice = 50, monthlyGoal = 1000, config }) {
+  const activeConfig = config || (typeof store !== "undefined" && store?.getAiConfig ? store.getAiConfig() : null);
   const systemPrompt = `You are a micro-business packaging and pricing strategist for solo entrepreneurs.
 Design 3 sensible packaging tiers to prevent the founder from undercharging or trading time for pennies.
 Respond with valid JSON array of 3 objects, each with:
@@ -520,7 +526,7 @@ Founder's Monthly Income Goal: $${monthlyGoal}
 
 Suggest 3 smart, practical packaging tiers.`;
 
-  const raw = await callAi({ prompt, systemPrompt, jsonMode: true, temperature: 0.6 });
+  const raw = await callAi({ prompt, systemPrompt, jsonMode: true, temperature: 0.6, config: activeConfig });
   try {
     return JSON.parse(raw);
   } catch {
@@ -557,7 +563,8 @@ Suggest 3 smart, practical packaging tiers.`;
 /**
  * 4. Local Community Noticeboard Flyer Polish
  */
-export async function polishFlyerHooks({ ideaName, problem, solution, audience }) {
+export async function polishFlyerHooks({ ideaName, problem, solution, audience, config }) {
+  const activeConfig = config || (typeof store !== "undefined" && store?.getAiConfig ? store.getAiConfig() : null);
   const systemPrompt = `You write high-converting, warm, friendly flyers for neighborhood bulletin boards, community library noticeboards, local coffee shop corkboards, and Nextdoor / Facebook groups.
 Avoid Silicon Valley jargon. Write like a helpful, trustworthy neighbor.
 Respond with valid JSON with keys:
@@ -574,7 +581,7 @@ Proposed Solution: ${solution || "A fast, friendly local service"}
 
 Generate friendly, community-oriented flyer copy.`;
 
-  const raw = await callAi({ prompt, systemPrompt, jsonMode: true, temperature: 0.7 });
+  const raw = await callAi({ prompt, systemPrompt, jsonMode: true, temperature: 0.7, config: activeConfig });
   try {
     return JSON.parse(raw);
   } catch {
@@ -594,7 +601,8 @@ Generate friendly, community-oriented flyer copy.`;
 /**
  * 5. Micro-Action Simplifier ("Make it even simpler")
  */
-export async function simplifyMission({ missionTitle, missionDesc, projectContext = "" }) {
+export async function simplifyMission({ missionTitle, missionDesc, projectContext = "", config }) {
+  const activeConfig = config || (typeof store !== "undefined" && store?.getAiConfig ? store.getAiConfig() : null);
   const systemPrompt = `You are a compassionate anti-procrastination coach for anxious solo entrepreneurs.
 Your job is to reduce any business task to a ridiculously small 3-to-5 minute baby step that requires ZERO courage, ZERO money, and CANNOT BE FAILED.
 Respond with valid JSON with keys:
@@ -609,7 +617,7 @@ Project: ${projectContext || "Micro startup"}
 
 Make this mission ridiculously simple so the founder can finish in 4 minutes today.`;
 
-  const raw = await callAi({ prompt, systemPrompt, jsonMode: true, temperature: 0.6 });
+  const raw = await callAi({ prompt, systemPrompt, jsonMode: true, temperature: 0.6, config: activeConfig });
   try {
     return JSON.parse(raw);
   } catch {

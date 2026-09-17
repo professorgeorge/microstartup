@@ -131,7 +131,8 @@ export function renderDossierView(container) {
         ideaName: s.name,
         problem: s1.problemHypothesis || s1.painStory || "everyday headache",
         solution: s1.elevatorPremise || s.stage3.canvas?.uniqueValueProposition || "friendly service",
-        audience: s1.targetAudience || "local residents"
+        audience: s1.targetAudience || "local residents",
+        config: store.getAiConfig()
       });
       customFlyerHooks = res;
     } catch (err) {

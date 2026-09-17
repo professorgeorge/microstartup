@@ -505,7 +505,8 @@ Respond strictly with valid JSON only in this exact format:
         ideaName: store.state.name,
         problem: s1.problemHypothesis || s1.painStory || "Everyday headache",
         targetPrice: currentPrice,
-        monthlyGoal: currentTarget
+        monthlyGoal: currentTarget,
+        config: store.getAiConfig()
       });
       activePricingTiers = res;
     } catch (err) {

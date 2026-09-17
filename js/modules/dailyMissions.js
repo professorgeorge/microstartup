@@ -221,7 +221,8 @@ function attachMissionsEvents(container) {
         const result = await simplifyMission({
           missionTitle: mission.title,
           missionDesc: mission.desc,
-          projectContext: `${store.state.name} (${store.state.problemDescription || ""})`
+          projectContext: `${store.state.name} (${store.state.problemDescription || ""})`,
+          config: store.getAiConfig()
         });
         activeBabyStep = {
           missionId: id,

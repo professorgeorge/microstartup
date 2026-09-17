@@ -457,7 +457,8 @@ function attachStage2Events(container, cheatSheetText) {
       const res = await generateCustomOutreach({
         audience: s1.targetAudience || "people dealing with this",
         problem: s1.currentWorkaround || s1.painStory || "handling this manually",
-        ideaName: store.state.name
+        ideaName: store.state.name,
+        config: store.getAiConfig()
       });
       tailoredAiScripts = res;
       activeScriptTab = "sms";

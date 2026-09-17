@@ -160,7 +160,8 @@ export function renderHelpTab(container) {
       try {
         const res = await coachCustomSetback({
           situation,
-          projectContext: `${store.state.name} (${store.state.stage1?.problemHypothesis || ""})`
+          projectContext: `${store.state.name} (${store.state.stage1?.problemHypothesis || ""})`,
+          config: store.getAiConfig()
         });
         customSetbackResult = res;
       } catch (err) {
