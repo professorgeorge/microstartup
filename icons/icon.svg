@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="warmGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#D97706" />
+      <stop offset="100%" stop-color="#C85A32" />
+    </linearGradient>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FAF6F0" />
+      <stop offset="100%" stop-color="#F2ECE4" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Outer Rounded Badge -->
+  <rect width="512" height="512" rx="128" fill="url(#bgGrad)" stroke="#E0D3C1" stroke-width="8" />
+  
+  <!-- Compass Ring -->
+  <circle cx="256" cy="256" r="180" fill="none" stroke="#E0D3C1" stroke-width="12" stroke-dasharray="8 12" />
+  
+  <!-- Compass Cardinal Ticks -->
+  <line x1="256" y1="40" x2="256" y2="70" stroke="#C85A32" stroke-width="10" stroke-linecap="round" />
+  <line x1="256" y1="442" x2="256" y2="472" stroke="#7E6B60" stroke-width="8" stroke-linecap="round" />
+  <line x1="40" y1="256" x2="70" y2="256" stroke="#7E6B60" stroke-width="8" stroke-linecap="round" />
+  <line x1="442" y1="256" x2="472" y2="256" stroke="#7E6B60" stroke-width="8" stroke-linecap="round" />
+  
+  <!-- Hearth Flame / Needle Core -->
+  <path d="M256 96 C270 170 330 220 330 286 C330 335 296 376 256 376 C216 376 182 335 182 286 C182 220 242 170 256 96 Z" fill="url(#warmGrad)" />
+  
+  <!-- Inner Seedling / Inner Flame -->
+  <path d="M256 220 C264 260 292 280 292 310 C292 335 275 352 256 352 C237 352 220 335 220 310 C220 280 248 260 256 220 Z" fill="#FAF6F0" />
+  
+  <!-- Center Anchor Dot -->
+  <circle cx="256" cy="310" r="10" fill="#251814" />
+</svg>

@@ -1,0 +1,84 @@
+/* responsive.css: Mobile-first and adaptive layout adjustments */
+
+@media (max-width: 992px) {
+  .lean-canvas-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+
+  .cell-problem,
+  .cell-solution,
+  .cell-metrics,
+  .cell-uvp,
+  .cell-advantage,
+  .cell-channels,
+  .cell-customers,
+  .cell-costs,
+  .cell-revenue {
+    grid-column: 1 / -1 !important;
+    grid-row: auto !important;
+  }
+
+  .experiment-cards-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .grants-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .alchemist-modal-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .scenario-list-pane {
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+    padding-right: 0;
+    padding-bottom: 14px;
+    max-height: 180px;
+    overflow-y: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .header-actions {
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+
+  .grid-2-col,
+  .grid-3-col {
+    grid-template-columns: 1fr;
+  }
+
+  .experiment-cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .main-wrapper {
+    padding: 16px 12px 60px 12px;
+  }
+
+  .stat-group {
+    flex-wrap: wrap;
+  }
+
+  .stage-title {
+    font-size: 22px;
+  }
+
+  .border-left-warm {
+    border-left: none !important;
+    border-top: 1px solid var(--color-border);
+    padding-left: 0 !important;
+    padding-top: 12px;
+    margin-top: 12px;
+  }
+}

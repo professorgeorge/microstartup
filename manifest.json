@@ -1,0 +1,19 @@
+{
+  "name": "Micro-Startup Compass",
+  "short_name": "StartupCompass",
+  "description": "A simple step-by-step guide for regular people turning a small idea into a real business.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#FAF6F0",
+  "theme_color": "#C85A32",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "./icons/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "productivity", "utilities"]
+}

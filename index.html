@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Micro-Startup Compass: A Simple Guide for Everyday Innovators</title>
+  <meta name="description" content="A friendly, step-by-step guide for regular people starting a small business or new idea. No confusing startup jargon.">
+  <meta name="theme-color" content="#C85A32">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  
+  <link rel="icon" type="image/svg+xml" href="./icons/icon.svg">
+  <link rel="manifest" href="./manifest.json">
+  
+  <link rel="stylesheet" href="./css/main.css">
+  <link rel="stylesheet" href="./css/stages.css">
+  <link rel="stylesheet" href="./css/modules.css">
+  <link rel="stylesheet" href="./css/responsive.css">
+</head>
+<body>
+
+  <!-- Clean Top App Bar -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="brand-section">
+        <div class="brand-logo" title="Micro-Startup Compass">🧭</div>
+        <div>
+          <h1 class="brand-title">Micro-Startup Compass</h1>
+          <div class="brand-tagline">A Simple Step-by-Step Guide for Everyday Innovators</div>
+        </div>
+      </div>
+
+      <div class="project-bar">
+        <span class="project-label">Idea:</span>
+        <input type="text" id="project-title-input" class="project-input" value="My New Idea" title="Click here to rename your idea">
+      </div>
+
+      <!-- Progress Score Meter -->
+      <div class="confidence-meter-box" id="confidence-meter-badge" title="Click to view your Founder Milestone & Momentum Badges" style="cursor: pointer;">
+        <span class="confidence-lbl">Progress:</span>
+        <span class="confidence-val" id="confidence-score-val">0%</span>
+        <span class="badge-icon-indicator" style="margin-left: 4px;" title="View Breakthrough Badges">🏅</span>
+      </div>
+
+      <!-- App Controls: AI Co-Pilot & Reset -->
+      <div class="header-actions flex-row items-center gap-2">
+        <button id="btn-ai-settings" class="btn btn-secondary text-xs" title="Configure optional AI (OpenAI, Gemini, Claude, Grok, Ollama)">
+          <span id="ai-status-indicator">✨</span> <span id="ai-btn-label">AI Co-Pilot</span>
+        </button>
+        <button id="btn-reset-data" class="btn btn-secondary text-xs text-danger" title="Permanently erase all stored data and start fresh">
+          🗑️ Reset App
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Unified Navigation Bar (Single Home for All Steps & Resources) -->
+  <nav class="stage-nav-bar" aria-label="Step and Resource Tabs">
+    <div class="stage-nav-inner" id="stage-nav">
+      <!-- Generated dynamically by app.js: 5 Step Tabs + Divider + 3 Resource Tabs (Help, Summary, Disclaimer) -->
+    </div>
+  </nav>
+
+
+
+  <!-- Main Active Tab View Container -->
+  <main class="main-wrapper">
+    <!-- 15-Minute Daily Founder Missions Section -->
+    <section class="missions-bar card card-oat mb-4" id="daily-missions-section">
+      <!-- Rendered dynamically by dailyMissions.js -->
+    </section>
+
+    <div id="main-stage-container">
+      <!-- Active module/tab renders here -->
+    </div>
+  </main>
+
+  <!-- Single Comprehensive Data Deletion Modal -->
+  <div class="modal-overlay" id="reset-modal" role="dialog" aria-modal="true">
+    <div class="modal-container" style="max-width: 480px;">
+      <div class="modal-header">
+        <div class="flex-between w-100">
+          <div>
+            <span class="badge badge-danger text-xs">Comprehensive Deletion</span>
+            <h3 class="m-0 mt-1">Erase All Data & Reset?</h3>
+          </div>
+          <button class="btn-icon" id="reset-close-btn" aria-label="Close modal">✕</button>
+        </div>
+      </div>
+      <div class="modal-body text-sm">
+        <div class="card card-warning-warm p-3 mb-3">
+          <strong class="text-danger">Warning: This action cannot be undone.</strong>
+          <p class="text-xs text-muted mb-0 mt-1">
+            This single action will permanently delete all your saved ideas, customer conversations, 1-page plans, and starter budgets from this browser's local storage and return the app to its fresh day-1 state.
+          </p>
+        </div>
+        <p class="text-xs text-muted mb-0">
+          If you want to save your notes first, click "Cancel", then click "Summary & Flyer" in the navigation bar to copy your text or print to PDF.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="reset-cancel-btn">Cancel</button>
+        <button class="btn btn-primary" id="btn-confirm-reset" style="background-color: var(--color-danger);">
+          Permanently Erase Everything
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Founder Momentum & Milestone Badges Modal -->
+  <div class="modal-overlay" id="milestones-modal" role="dialog" aria-modal="true">
+    <div class="modal-container" style="max-width: 600px;" id="milestones-modal-container">
+      <!-- Rendered dynamically by milestoneBadges.js -->
+    </div>
+  </div>
+
+  <!-- Customer Discovery Conversation Simulator Modal -->
+  <div class="modal-overlay" id="simulator-modal" role="dialog" aria-modal="true">
+    <div class="modal-container" style="max-width: 680px;" id="simulator-modal-container">
+      <!-- Rendered dynamically by conversationSimulator.js -->
+    </div>
+  </div>
+
+  <!-- Optional AI Co-Pilot Settings Modal -->
+  <div class="modal-overlay" id="ai-settings-modal" role="dialog" aria-modal="true">
+    <div class="modal-container" style="max-width: 620px;" id="ai-settings-modal-container">
+      <!-- Rendered dynamically by aiSettingsModal.js -->
+    </div>
+  </div>
+
+  <!-- Quiet Fine Print Footer -->
+  <footer class="app-footer">
+    <div class="footer-inner text-center">
+      <div class="footer-credit text-xs text-muted">
+        Conceptualization and development credit: 
+        <a href="https://www.linkedin.com/in/beingbabu/" target="_blank" rel="noopener noreferrer" class="credit-link">
+          <strong>Professor Babu George</strong>
+        </a>.
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="./js/app.js?v=16"></script>
+</body>
+</html>
