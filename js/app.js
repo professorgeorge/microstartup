@@ -33,8 +33,7 @@ const STEP_TABS = [
 const RESOURCE_TABS = [
   { id: "stories", name: "🌟 Real Stories", title: "Everyday Innovator Stories: The Micro-Startup Hall of Fame" },
   { id: "help", name: "💡 Help Guide", title: "The Encourager & Fix-It Guide" },
-  { id: "summary", name: "📄 Summary & Flyer", title: "Project Summary & Community Flyer" },
-  { id: "disclaimer", name: "⚖️ Legal Disclaimer", title: "Legal Disclaimer & Terms of Use" }
+  { id: "summary", name: "📄 Summary & Flyer", title: "Project Summary & Community Flyer" }
 ];
 
 class App {
@@ -53,7 +52,10 @@ class App {
     this.aiBtn = document.getElementById("btn-ai-settings");
     this.aiStatusIndicator = document.getElementById("ai-status-indicator");
     this.aiBtnLabel = document.getElementById("ai-btn-label");
-    this.missionsContainer = document.getElementById("daily-missions-section");
+    this.missionsModal = document.getElementById("missions-modal");
+    this.missionsContainer = document.getElementById("missions-modal-container");
+    this.missionsBtn = document.getElementById("btn-header-missions");
+    this.missionsCountEl = document.getElementById("header-missions-count");
     this.activeTab = store.state.currentStage || 1;
   }
 
@@ -62,7 +64,7 @@ class App {
     this.setupEventListeners();
     this.setupModals();
     this.renderNavigation();
-    this.renderMissions();
+    this.updateMissionsHeaderState();
     this.updateAiHeaderState();
     this.navigateToTab(this.activeTab);
     initSetbackAlchemist();
@@ -90,9 +92,10 @@ class App {
     }
   }
 
-  renderMissions() {
-    if (this.missionsContainer) {
-      renderDailyMissions(this.missionsContainer);
+  updateMissionsHeaderState() {
+    if (this.missionsCountEl) {
+      const stats = store.getMissionStats();
+      this.missionsCountEl.textContent = `${stats.completed}/${stats.total}`;
     }
   }
 
@@ -124,9 +127,22 @@ class App {
       }
     });
 
+    // Quiet Fine Print Footer Legal Link
+    document.getElementById("footer-link-disclaimer")?.addEventListener("click", (e) => {
+      e.preventDefault();
+      this.navigateToTab("disclaimer");
+    });
+
+    window.addEventListener("app:open-missions", () => {
+      if (this.openMissions) this.openMissions();
+    });
+
     window.addEventListener("app:state-updated", () => {
       this.renderNavigation();
-      this.renderMissions();
+      this.updateMissionsHeaderState();
+      if (this.missionsModal?.classList.contains("modal-open") && this.missionsContainer) {
+        renderDailyMissions(this.missionsContainer);
+      }
     });
 
     window.addEventListener("app:open-simulator", () => {
@@ -195,13 +211,26 @@ class App {
       if (e.target === this.aiSettingsModal) closeAiSettings();
     });
 
+    // Missions Modal
+    this.openMissions = () => {
+      if (this.missionsContainer) renderDailyMissions(this.missionsContainer);
+      this.missionsModal?.classList.add("modal-open");
+    };
+    const closeMissions = () => {
+      this.missionsModal?.classList.remove("modal-open");
+    };
+    this.missionsBtn?.addEventListener("click", this.openMissions);
+    this.missionsModal?.addEventListener("click", (e) => {
+      if (e.target === this.missionsModal) closeMissions();
+    });
+
     // Single Comprehensive Reset Action
     document.getElementById("btn-confirm-reset")?.addEventListener("click", () => {
       localStorage.removeItem("micro_startup_compass_v1");
       store.resetToFresh();
       if (this.projectTitleEl) this.projectTitleEl.value = store.state.name;
       this.renderNavigation();
-      this.renderMissions();
+      this.updateMissionsHeaderState();
       this.navigateToTab(1);
       closeReset();
       alert("All data has been reset to a clean, fresh start.");

@@ -42,8 +42,11 @@
         <span class="badge-icon-indicator" style="margin-left: 4px;" title="View Breakthrough Badges">🏅</span>
       </div>
 
-      <!-- App Controls: AI Co-Pilot & Reset -->
+      <!-- App Controls: Missions, AI Co-Pilot & Reset -->
       <div class="header-actions flex-row items-center gap-2">
+        <button id="btn-header-missions" class="btn btn-secondary text-xs" title="Open 15-Minute Daily Founder Missions">
+          <span>⚡</span> <span>Missions:</span> <strong id="header-missions-count">0/10</strong>
+        </button>
         <button id="btn-ai-settings" class="btn btn-secondary text-xs" title="Configure optional AI (OpenAI, Gemini, Claude, Grok, Ollama)">
           <span id="ai-status-indicator">✨</span> <span id="ai-btn-label">AI Co-Pilot</span>
         </button>
@@ -57,23 +60,23 @@
   <!-- Unified Navigation Bar (Single Home for All Steps & Resources) -->
   <nav class="stage-nav-bar" aria-label="Step and Resource Tabs">
     <div class="stage-nav-inner" id="stage-nav">
-      <!-- Generated dynamically by app.js: 5 Step Tabs + Divider + 3 Resource Tabs (Help, Summary, Disclaimer) -->
+      <!-- Generated dynamically by app.js: 5 Step Tabs + Divider + Resource Tabs (Stories, Help, Summary) -->
     </div>
   </nav>
 
-
-
   <!-- Main Active Tab View Container -->
   <main class="main-wrapper">
-    <!-- 15-Minute Daily Founder Missions Section -->
-    <section class="missions-bar card card-oat mb-4" id="daily-missions-section">
-      <!-- Rendered dynamically by dailyMissions.js -->
-    </section>
-
     <div id="main-stage-container">
       <!-- Active module/tab renders here -->
     </div>
   </main>
+
+  <!-- 15-Minute Daily Founder Missions Modal -->
+  <div class="modal-overlay" id="missions-modal" role="dialog" aria-modal="true">
+    <div class="modal-container" style="max-width: 680px;" id="missions-modal-container">
+      <!-- Rendered dynamically by dailyMissions.js -->
+    </div>
+  </div>
 
   <!-- Single Comprehensive Data Deletion Modal -->
   <div class="modal-overlay" id="reset-modal" role="dialog" aria-modal="true">
@@ -136,10 +139,14 @@
         <a href="https://www.linkedin.com/in/beingbabu/" target="_blank" rel="noopener noreferrer" class="credit-link">
           <strong>Professor Babu George</strong>
         </a>.
+        <span class="footer-separator" style="margin: 0 8px; color: var(--color-border);" aria-hidden="true">•</span>
+        <a href="#disclaimer" id="footer-link-disclaimer" class="credit-link text-muted" title="View Legal Disclaimer & Terms of Use">
+          Legal Disclaimer & Terms of Use
+        </a>
       </div>
     </div>
   </footer>
 
-  <script type="module" src="./js/app.js?v=16"></script>
+  <script type="module" src="./js/app.js?v=17"></script>
 </body>
 </html>

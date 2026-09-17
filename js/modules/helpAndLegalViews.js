@@ -54,16 +54,7 @@ export function renderHelpTab(container) {
   // Attach Guide Actions
   if (activeHelpSubTab === 'guide') {
     container.querySelector("#btn-help-go-missions")?.addEventListener("click", () => {
-      const missionsDrawer = document.getElementById("daily-missions-section");
-      if (missionsDrawer) {
-        missionsDrawer.scrollIntoView({ behavior: "smooth", block: "start" });
-        // Expand missions list if collapsed
-        const toggleBtn = missionsDrawer.querySelector("#missions-toggle-btn");
-        const list = missionsDrawer.querySelector("#missions-checklist");
-        if (list && list.classList.contains("hidden") && toggleBtn) {
-          toggleBtn.click();
-        }
-      }
+      window.dispatchEvent(new CustomEvent("app:open-missions"));
     });
 
     container.querySelector("#btn-help-go-step1")?.addEventListener("click", () => {
@@ -142,12 +133,12 @@ function renderAppGuideView() {
               <strong class="text-espresso">"I only have 15 minutes today"</strong>
             </div>
             <p class="text-xs text-muted mb-3">
-              Look at the <strong>15-Minute Daily Missions</strong> bar at the very top of your screen. 
+              Click <strong>⚡ Missions</strong> in the top header or click the button below. 
               Complete just today's single micro-task and call it a win!
             </p>
           </div>
           <button id="btn-help-go-missions" class="btn btn-secondary text-xs w-100">
-            ⚡ Open Today's Daily Mission
+            ⚡ Open 15-Minute Daily Missions
           </button>
         </div>
 
@@ -291,7 +282,7 @@ function renderAppGuideView() {
         <div class="help-tool-card">
           <strong class="text-espresso">⚡ 15-Minute Daily Missions</strong>
           <p class="text-xs text-muted mb-0 mt-1">
-            Located in the top banner. Breaks the journey into 10 bite-sized missions so you always know your single next step.
+            Located in the top header (or via Path 1). Breaks the journey into 10 bite-sized missions so you always know your single next step.
           </p>
         </div>
         <div class="help-tool-card">
@@ -478,7 +469,12 @@ function renderFaqView() {
 export function renderDisclaimerTab(container) {
   container.innerHTML = `
     <div class="stage-header">
-      <div class="stage-tag">Legal Tab: Compliance & Terms</div>
+      <div class="flex-between mb-2">
+        <button class="btn btn-secondary text-xs" id="btn-disclaimer-back">
+          ← Return to Step 1
+        </button>
+        <span class="stage-tag m-0">Legal Compliance & Terms</span>
+      </div>
       <h2 class="stage-title">Legal Disclaimer & Terms of Use</h2>
       <p class="stage-subtitle">
         Please review these terms carefully before using this brainstorming guide.
@@ -531,6 +527,10 @@ export function renderDisclaimerTab(container) {
       </div>
     </div>
   `;
+
+  container.querySelector("#btn-disclaimer-back")?.addEventListener("click", () => {
+    window.dispatchEvent(new CustomEvent("app:navigate-tab", { detail: { tab: 1 } }));
+  });
 }
 
 export function renderAboutTab(container) {
